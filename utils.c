@@ -32,19 +32,19 @@ sfBool utils_is_valid_key(sfKeyCode keyCode) {
 }
 
 sfVector2i utils_update_pos(sfVector2i pos, direction dir) {
-    sfVector2i vec;
+    sfVector2i vec = {pos.x, pos.y};
     switch (dir) {
         case DIR_UP:
-            vec = {pos.x, pos.y - 1};
+            vec.y--;
             break;
         case DIR_DOWN:
-            vec ={pos.x, pos.y + 1};
+            vec.y++;
             break;
         case DIR_LEFT:
-            vec = {pos.x - 1, pos.y};
+            vec.x--;
             break;
         case DIR_RIGHT:
-            vec = {pos.x + 1, pos.y};
+            vec.x++;
     }
     return vec;
 }

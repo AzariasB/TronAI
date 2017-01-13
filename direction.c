@@ -5,19 +5,19 @@
 #ifdef DIRECTION_H
 
 sfVector2i direction_to_vector(direction d) {
-    sfVector2i vec;
+    sfVector2i vec = {0,0};
     switch (d) {
         case DIR_UP:
-            vec = {0, -1};
+            vec.y = -1;
             break;
         case DIR_DOWN:
-            vec = {0, 1};
+            vec.y = 1;
             break;
         case DIR_LEFT:
-            vec = {-1, 0};
+            vec.x = -1;
             break;
         case DIR_RIGHT:
-            vec = {1, 0};
+            vec.x = 1;
             break;
     }
     return vec;
