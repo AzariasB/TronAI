@@ -15,6 +15,8 @@
 #define GRID_H
 
 #include <stdlib.h>
+#include <SFML/Config.h>
+#include <SFML/System/Vector2.h>
 
 typedef struct grid {
 	int ** m_grid;
@@ -26,6 +28,8 @@ typedef struct grid {
 grid *grid_create(int width, int height);
 
 grid *grid_copy(const grid *to_copy);
+
+sfBool grid_contains(const grid *g, sfVector2i pos);
 
 void grid_destroy(grid* g);
 

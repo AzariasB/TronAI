@@ -15,6 +15,7 @@
 #define GAME_H
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "grid.h"
 #include "player.h"
@@ -37,6 +38,8 @@ void game_main_loop(game *g, sfRenderWindow *window);
 void game_process(game *g, sfEvent ev);
 
 void game_add_player_pos(game *g, player *p);
+
+sfBool game_player_is_dead(game *g, player *p);
 
 game *game_copy(const game *g);
 

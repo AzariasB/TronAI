@@ -45,4 +45,9 @@ void grid_destroy(grid* g) {
     free(g);
 }
 
+sfBool grid_contains(const grid* g, sfVector2i pos)
+{
+    return pos.x >= 0 && pos.y >= 0 && pos.x < g->width && pos.y < g->height;
+}
+
 #endif

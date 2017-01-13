@@ -34,12 +34,12 @@ void game_render(const game* g, sfRenderWindow* window) {
     for (int y = 0; y < g->board->height; y++) {
         for (int x = 0; x < g->board->width; x++) {
             int m_v = g->board->m_grid[y][x];
-//            printf("x : %d, y: %d, v:%d\n", x, y, m_v);
+            //            printf("x : %d, y: %d, v:%d\n", x, y, m_v);
             if (m_v == g->player1->id) {
-                sfRectangleShape *shape = utils_rec_from_xy_color(x,y,g->player1->id);
+                sfRectangleShape *shape = utils_rec_from_xy_color(x, y, g->player1->id);
                 sfRenderWindow_drawRectangleShape(window, shape, NULL);
-            } else if (m_v == g->player2->id ) {
-                sfRectangleShape *shape = utils_rec_from_xy_color(x,y, g->player2->id);
+            } else if (m_v == g->player2->id) {
+                sfRectangleShape *shape = utils_rec_from_xy_color(x, y, g->player2->id);
                 sfRenderWindow_drawRectangleShape(window, shape, NULL);
             }
         }
@@ -72,6 +72,10 @@ void game_main_loop(game* g, sfRenderWindow *window) {
 
 }
 
+sfBool game_player_is_dead(game* g, player* p) {
+    return !grid_contains(g->board, p->position);
+}
+
 void game_process(game* g, sfEvent ev) {
     if (ev.type == sfEvtKeyPressed && utils_is_valid_key(ev.key.code)) {
         g->player1->m_direction = direction_from_key_code(ev.key.code);
@@ -80,9 +84,14 @@ void game_process(game* g, sfEvent ev) {
     }
     sfVector2i nw_pos = utils_update_pos(g->player1->position, g->player1->m_direction);
     g->player1->position = nw_pos;
+    if (game_player_is_dead(g, g->player1)) {
+        printf("Tu es mort\n");
+        g->paused = sfTrue;
+    } else {
+        game_add_player_pos(g, g->player1);
+    }
 
-    game_add_player_pos(g, g->player1 );
-    
+
 }
 
 void game_init_player_pos(game* g) {
