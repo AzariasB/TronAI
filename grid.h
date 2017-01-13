@@ -18,6 +18,8 @@
 #include <SFML/Config.h>
 #include <SFML/System/Vector2.h>
 
+#include "player.h"
+
 typedef struct grid {
 	int ** m_grid;
 	int width;
@@ -30,6 +32,8 @@ grid *grid_create(int width, int height);
 grid *grid_copy(const grid *to_copy);
 
 sfBool grid_contains(const grid *g, sfVector2i pos);
+
+int grid_at(const grid *g, sfVector2i pos);
 
 void grid_destroy(grid* g);
 

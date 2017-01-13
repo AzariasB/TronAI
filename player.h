@@ -21,6 +21,7 @@
 
 typedef struct player{
 	sfVector2i position;
+        sfBool is_dead;
 	direction m_direction;
 	int id;
 } player;

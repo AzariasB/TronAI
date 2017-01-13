@@ -50,4 +50,9 @@ sfBool grid_contains(const grid* g, sfVector2i pos)
     return pos.x >= 0 && pos.y >= 0 && pos.x < g->width && pos.y < g->height;
 }
 
+int grid_at(const grid* g, sfVector2i pos)
+{
+    return g->m_grid[pos.y][pos.x];
+}
+
 #endif

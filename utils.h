@@ -20,6 +20,7 @@
 // The number of pixel for a single cell
 #define CELL_SIDE 20
 
+#define define_list(type) \
 
 #include <stdlib.h>
 #include <SFML/Graphics.h>
@@ -39,6 +40,8 @@ sfBool utils_is_valid_key(sfKeyCode keyCode);
 sfVector2i utils_update_pos(sfVector2i pos, direction dir);
 
 sfRectangleShape *utils_rec_from_xy_color(int x, int y, int color);
+
+sfText *utils_create_text(char *content, int charSize);
 
 #endif /* UTILS_H */
 

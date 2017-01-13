@@ -60,4 +60,15 @@ sfRectangleShape *utils_rec_from_xy_color(int x, int y, int color) {
     return rect;
 }
 
+sfText *utils_create_text(char* content, int charSize) {
+    sfText *text = sfText_create();
+
+    sfText_setCharacterSize(text, charSize);
+    sfText_setString(text, content);
+
+    sfFont *tron_font = sfFont_createFromFile("tron.ttf");
+    sfText_setFont(text, tron_font);
+    return text;
+}
+
 #endif
