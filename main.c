@@ -45,9 +45,11 @@ int main(int argc, char** argv) {
             m_game->player2->position.y);
 
 
-    sfRenderWindow_setFramerateLimit(window, 10);
+    sfRenderWindow_setFramerateLimit(window, 20);
 
-
+    game *g_cpy = game_copy(m_game);
+    game_destroy(g_cpy);
+    
     //	sfMusic_play(music);
     while (sfRenderWindow_isOpen(window)) {
         game_main_loop(m_game, window);

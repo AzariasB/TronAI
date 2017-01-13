@@ -49,4 +49,15 @@ sfVector2i utils_update_pos(sfVector2i pos, direction dir) {
     return vec;
 }
 
+sfRectangleShape *utils_rec_from_xy_color(int x, int y, int color) {
+    sfRectangleShape *rect = sfRectangleShape_create();
+    sfRectangleShape_setFillColor(rect, utils_int_to_color(color));
+    sfVector2f rectSize = {CELL_SIDE, CELL_SIDE};
+    sfRectangleShape_setSize(rect, rectSize);
+
+    sfVector2f rectPos = {CELL_SIDE*x, CELL_SIDE * y};
+    sfRectangleShape_setPosition(rect, rectPos);
+    return rect;
+}
+
 #endif

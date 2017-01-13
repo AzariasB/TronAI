@@ -38,5 +38,7 @@ sfBool utils_is_valid_key(sfKeyCode keyCode);
 
 sfVector2i utils_update_pos(sfVector2i pos, direction dir);
 
+sfRectangleShape *utils_rec_from_xy_color(int x, int y, int color);
+
 #endif /* UTILS_H */
 

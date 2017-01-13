@@ -31,12 +31,19 @@ void game_resize_window(const game* g, sfRenderWindow* window) {
 }
 
 void game_render(const game* g, sfRenderWindow* window) {
-
-    sfRectangleShape *p1_rect = player_to_rect(g->player1);
-    sfRectangleShape *p2_rect = player_to_rect(g->player2);
-
-    sfRenderWindow_drawRectangleShape(window, p1_rect, NULL);
-    sfRenderWindow_drawRectangleShape(window, p2_rect, NULL);
+    for (int y = 0; y < g->board->height; y++) {
+        for (int x = 0; x < g->board->width; x++) {
+            int m_v = g->board->m_grid[y][x];
+//            printf("x : %d, y: %d, v:%d\n", x, y, m_v);
+            if (m_v == g->player1->id) {
+                sfRectangleShape *shape = utils_rec_from_xy_color(x,y,g->player1->id);
+                sfRenderWindow_drawRectangleShape(window, shape, NULL);
+            } else if (m_v == g->player2->id ) {
+                sfRectangleShape *shape = utils_rec_from_xy_color(x,y, g->player2->id);
+                sfRenderWindow_drawRectangleShape(window, shape, NULL);
+            }
+        }
+    }
 
 }
 
@@ -53,9 +60,6 @@ void game_main_loop(game* g, sfRenderWindow *window) {
         }
     }
 
-    game *g_cpy = game_copy(g);
-    game_destroy(g_cpy);
-
     sfRenderWindow_clear(window, sfBlack);
 
     if (!g->paused) {
@@ -70,12 +74,15 @@ void game_main_loop(game* g, sfRenderWindow *window) {
 
 void game_process(game* g, sfEvent ev) {
     if (ev.type == sfEvtKeyPressed && utils_is_valid_key(ev.key.code)) {
-        direction dir = direction_from_key_code(ev.key.code);
-        sfVector2i nw_pos = utils_update_pos(g->player1->position, dir);
+        g->player1->m_direction = direction_from_key_code(ev.key.code);
         //Check if dead
-        
-        g->player1->position = nw_pos;
+
     }
+    sfVector2i nw_pos = utils_update_pos(g->player1->position, g->player1->m_direction);
+    g->player1->position = nw_pos;
+
+    game_add_player_pos(g, g->player1 );
+    
 }
 
 void game_init_player_pos(game* g) {
@@ -83,6 +90,12 @@ void game_init_player_pos(game* g) {
     do {
         g->player2->position = utils_vector_random(g->board->width, g->board->height);
     } while (utils_vector_same(g->player1->position, g->player2->position));
+    game_add_player_pos(g, g->player1);
+    game_add_player_pos(g, g->player2);
+}
+
+void game_add_player_pos(game* g, player* p) {
+    g->board->m_grid[p->position.y][p->position.x] = p->id;
 }
 
 game *game_copy(const game* g) {

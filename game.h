@@ -36,6 +36,8 @@ void game_main_loop(game *g, sfRenderWindow *window);
 
 void game_process(game *g, sfEvent ev);
 
+void game_add_player_pos(game *g, player *p);
+
 game *game_copy(const game *g);
 
 void game_render(const game *g, sfRenderWindow *window);
