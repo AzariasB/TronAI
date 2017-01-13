@@ -1,0 +1,9 @@
+
+nbproject/
+stardust/
+
+.dep.inc
+
+*.o
+
+prog
