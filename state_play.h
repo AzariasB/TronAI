@@ -17,11 +17,13 @@
 
 typedef struct game game;
 
-typedef struct state_play{
+typedef struct state_play {
     game_state *super;
 } state_play;
 
 state_play *state_play_create();
+
+state_play *state_play_copy(state_play *s);
 
 void state_play_destroy(state_play *s);
 

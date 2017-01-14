@@ -13,6 +13,7 @@
 #include <SFML/Window/Event.h>
 
 #include "game_state.h"
+#include "utils.h"
 
 typedef struct state_pause {
     game_state *super;
@@ -23,6 +24,8 @@ typedef struct state_pause {
 } state_pause;
 
 state_pause *state_pause_create();
+
+state_pause *state_pause_copy(state_pause *s);
 
 void state_pause_destroy(state_pause *s);
 
@@ -43,10 +46,6 @@ void state_pause_draw(game *g);
 void state_pause_button_clicked(game *g, sfMouseButtonEvent ev);
 
 void state_pause_mouse_moved(state_pause *p, sfMouseMoveEvent ev);
-
-void state_pause_hilight_text(sfText *t, sfMouseMoveEvent ev);
-
-sfBool state_pause_in_text(sfText *text, float x, float y);
 
 #endif /* STATE_PAUSE_H */
 

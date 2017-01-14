@@ -17,7 +17,14 @@ state_play *state_play_create() {
     state->super->resume = &state_play_resume;
     state->super->update = &state_play_update;
 
+
     return state;
+}
+
+state_play* state_play_copy(state_play* s) {
+    state_play *copy = malloc(sizeof (state_play));
+    copy->super = game_state_copy(s->super);
+    return copy;
 }
 
 void state_play_destroy(state_play* s) {
@@ -41,6 +48,8 @@ void state_play_draw(game* g) {
             if (m_v == g->player1->id) {
                 sfRectangleShape *shape = utils_rec_from_xy_color(x, y, g->player1->id);
                 sfRenderWindow_drawRectangleShape(g->window, shape, NULL);
+
+
             } else if (m_v == g->player2->id) {
                 sfRectangleShape *shape = utils_rec_from_xy_color(x, y, g->player2->id);
                 sfRenderWindow_drawRectangleShape(g->window, shape, NULL);
@@ -54,8 +63,7 @@ void state_play_pause(game* g) {
 }
 
 void state_play_resume(game* g) {
-    g->paused = sfTrue;
-    //Wait for user input
+    g->paused = sfTrue; //Wait for user input
 }
 
 void state_play_update(game* g) {

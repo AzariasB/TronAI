@@ -14,7 +14,6 @@ game_state *game_state_create(char* name) {
 }
 
 game_state *game_state_copy(const game_state* to_copy) {
-    printf("game state copy\n");
     game_state *copy = malloc(sizeof(game_state));
     memcpy(copy, to_copy, sizeof(*copy));
 

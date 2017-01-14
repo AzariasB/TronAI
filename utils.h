@@ -20,13 +20,14 @@
 // The number of pixel for a single cell
 #define CELL_SIDE 20
 
-#define define_list(type) \
 
 #include <stdlib.h>
 #include <SFML/Graphics.h>
+#include <string.h>
 
 #include "direction.h"
 
+#define SAME(a,b)(strcmp(a,b) == 0)
 
 
 sfVector2i utils_vector_random(int max_x, int max_y);
@@ -42,6 +43,11 @@ sfVector2i utils_update_pos(sfVector2i pos, direction dir);
 sfRectangleShape *utils_rec_from_xy_color(int x, int y, int color);
 
 sfText *utils_create_text(char *content, int charSize);
+
+sfBool utils_text_contains(sfText *text, float x, float y);
+
+void utils_hilight_text(sfText *text, sfMouseMoveEvent ev);
+
 
 #endif /* UTILS_H */
 

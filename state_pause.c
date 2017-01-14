@@ -10,7 +10,6 @@
 state_pause *state_pause_create() {
     state_pause *s_p = malloc(sizeof (state_pause));
     s_p->super = game_state_create("pause");
-    s_p->super = game_state_create("pause");
     s_p->super->cleanup = &state_pause_cleanup;
     s_p->super->pause = &state_pause_pause;
     s_p->super->init = &state_pause_init;
@@ -41,15 +40,6 @@ state_pause *state_pause_create() {
     return s_p;
 }
 
-void state_pause_destroy(state_pause *s) {
-    game_state_destroy(s->super);
-    sfText_destroy(s->exit_text);
-    sfText_destroy(s->pause_text);
-    sfText_destroy(s->menu_text);
-    sfText_destroy(s->resume_texte);
-    free(s);
-}
-
 void state_pause_init(game *g) {
 
 }
@@ -77,45 +67,33 @@ void state_pause_handle_event(game *g) {
         } else if (event.type == sfEvtMouseButtonPressed) {
             state_pause_button_clicked(g, event.mouseButton);
         } else if (event.type == sfEvtMouseMoved) {
-            state_pause_mouse_moved(g->m_state_pause, event.mouseMove);
+            state_pause_mouse_moved(g->st_manager->st_pause, event.mouseMove);
         }
     }
 }
 
 void state_pause_button_clicked(game *g, sfMouseButtonEvent ev) {
     //Check resume
-    if (state_pause_in_text(g->m_state_pause->resume_texte, ev.x, ev.y)) {
+    state_pause *st_pause = g->st_manager->st_pause;
+    if (utils_text_contains(st_pause->resume_texte, ev.x, ev.y)) {
         game_change_state(g, "play");
         return;
         //change state - return
-    } else if (state_pause_in_text(g->m_state_pause->exit_text, ev.x, ev.y)) {
+    } else if (utils_text_contains(st_pause->exit_text, ev.x, ev.y)) {
         //Change state -return
         sfRenderWindow_close(g->window);
         return;
-    } else if (state_pause_in_text(g->m_state_pause->menu_text, ev.x, ev.y)) {
-        // game_change_state(g, "menu");
+    } else if (utils_text_contains(st_pause->menu_text, ev.x, ev.y)) {
+        game_change_state(g, "menu");
         return;
     }
 
 }
 
 void state_pause_mouse_moved(state_pause* p, sfMouseMoveEvent ev) {
-    state_pause_hilight_text(p->resume_texte, ev);
-    state_pause_hilight_text(p->exit_text, ev);
-    state_pause_hilight_text(p->menu_text, ev);
-}
-
-void state_pause_hilight_text(sfText* t, sfMouseMoveEvent ev) {
-    if (state_pause_in_text(t, ev.x, ev.y)) {
-        sfText_setColor(t, sfRed);
-    } else {
-        sfText_setColor(t, sfWhite);
-    }
-}
-
-sfBool state_pause_in_text(sfText *text, float x, float y) {
-    sfFloatRect pos = sfText_getGlobalBounds(text);
-    return sfFloatRect_contains(&pos, x, y);
+    utils_hilight_text(p->resume_texte, ev);
+    utils_hilight_text(p->exit_text, ev);
+    utils_hilight_text(p->menu_text, ev);
 }
 
 void state_pause_update(game *g) {
@@ -123,10 +101,31 @@ void state_pause_update(game *g) {
 }
 
 void state_pause_draw(game *g) {
-    sfRenderWindow_drawText(g->window, g->m_state_pause->pause_text, NULL);
-    sfRenderWindow_drawText(g->window, g->m_state_pause->resume_texte, NULL);
-    sfRenderWindow_drawText(g->window, g->m_state_pause->exit_text, NULL);
-    sfRenderWindow_drawText(g->window, g->m_state_pause->menu_text, NULL);
+    state_pause *st_pause = g->st_manager->st_pause;
+    sfRenderWindow_drawText(g->window, st_pause->pause_text, NULL);
+    sfRenderWindow_drawText(g->window, st_pause->resume_texte, NULL);
+    sfRenderWindow_drawText(g->window, st_pause->exit_text, NULL);
+    sfRenderWindow_drawText(g->window, st_pause->menu_text, NULL);
+}
+
+state_pause *state_pause_copy(state_pause* s) {
+    state_pause *copy = malloc(sizeof (state_pause));
+    copy->exit_text = sfText_copy(s->exit_text);
+    copy->menu_text = sfText_copy(s->menu_text);
+    copy->pause_text = sfText_copy(s->pause_text);
+    copy->resume_texte = sfText_copy(s->resume_texte);
+    copy->super = game_state_copy(s->super);
+
+    return copy;
+}
+
+void state_pause_destroy(state_pause *s) {
+    game_state_destroy(s->super);
+    sfText_destroy(s->exit_text);
+    sfText_destroy(s->pause_text);
+    sfText_destroy(s->menu_text);
+    sfText_destroy(s->resume_texte);
+    free(s);
 }
 
 #endif

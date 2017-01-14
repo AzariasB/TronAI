@@ -22,22 +22,15 @@
 #include "grid.h"
 #include "player.h"
 #include "utils.h"
+#include "state_manager.h"
 
-typedef struct game_state game_state;
-typedef struct state_pause state_pause;
-typedef struct state_play state_play;
 
 typedef struct game {
     player *player1;
     player *player2; //IA
     grid *board;
-    game_state *current_state;
-
-    // Game available states
-    state_play *m_state_play;
-    state_pause *m_state_pause;
-    //...
-    //---------------------------------
+    
+    state_manager *st_manager;
 
     sfRenderWindow *window;
     sfBool paused;
@@ -49,7 +42,7 @@ game *game_create();
 
 sfVector2i game_window_size(const game *g);
 
-void game_main_loop(game *g, sfRenderWindow *window);
+void game_main_loop(game *g);
 
 
 void game_add_player_pos(game *g, player *p);

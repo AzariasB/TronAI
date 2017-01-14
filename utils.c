@@ -71,4 +71,16 @@ sfText *utils_create_text(char* content, int charSize) {
     return text;
 }
 
+sfBool utils_text_contains(sfText* text, float x, float y) {
+    sfFloatRect bound = sfText_getGlobalBounds(text);
+    return sfFloatRect_contains(&bound, x, y);
+}
+
+void utils_hilight_text(sfText *text, sfMouseMoveEvent ev) {
+    if (utils_text_contains(text, ev.x, ev.y)) {
+        sfText_setColor(text, sfRed);
+    } else {
+        sfText_setColor(text, sfWhite);
+    }
+}
 #endif

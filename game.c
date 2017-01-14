@@ -21,11 +21,7 @@ game *game_create() {
     g->board = board;
     g->ended = sfFalse;
     g->paused = sfTrue;
-    g->m_state_play = state_play_create();
-    g->m_state_pause = state_pause_create();
-
-    g->current_state = g->m_state_play->super;
-
+    g->st_manager = state_manager_create();
     return g;
 }
 
@@ -34,13 +30,12 @@ sfVector2i game_window_size(const game* g) {
     return size;
 }
 
-void game_main_loop(game* g, sfRenderWindow *window) {
-    (g->current_state->handle_event)(g);
-    (g->current_state->handle_event)(g);
-    (g->current_state->update)(g);
-    sfRenderWindow_clear(window, sfBlack);
-    (g->current_state->draw)(g);
-    sfRenderWindow_display(window);
+void game_main_loop(game* g) {
+    (g->st_manager->current_state->handle_event)(g);
+    (g->st_manager->current_state->update)(g);
+    sfRenderWindow_clear(g->window, sfBlack);
+    (g->st_manager->current_state->draw)(g);
+    sfRenderWindow_display(g->window);
 
 }
 
@@ -72,16 +67,7 @@ void game_add_player_pos(game* g, player* p) {
 }
 
 void game_change_state(game* g, char* state_name) {
-    //Change with looping in array
-    if (strcmp(state_name, "play") == 0) {
-        (g->current_state)->pause(g);
-        g->current_state = g->m_state_play->super;
-        (g->current_state)->resume(g);
-    } else {
-        (g->current_state)->pause(g);
-        g->current_state = g->m_state_pause->super;
-        (g->current_state)->resume(g);
-    }
+    state_manager_change_state(g->st_manager, g, state_name);
 }
 
 game *game_copy(const game* g) {
@@ -90,14 +76,14 @@ game *game_copy(const game* g) {
     player *p1_copy = player_copy(g->player1);
     player *p2_copy = player_copy(g->player2);
     grid *board_copy = grid_copy(g->board);
-    game_state *state_copy = game_state_copy(g->current_state);
-
+    state_manager *manager_copy = state_manager_copy(g->st_manager);
+    
     copy->board = board_copy;
     copy->player1 = p1_copy;
     copy->player2 = p2_copy;
     copy->paused = g->paused;
-    copy->current_state = state_copy;
-
+    copy->st_manager = manager_copy;
+    copy->window = g->window;
     return copy;
 }
 
@@ -105,7 +91,7 @@ void game_destroy(game* g) {
     grid_destroy(g->board);
     player_destroy(g->player1);
     player_destroy(g->player2);
-    game_state_destroy(g->current_state);
+    state_manager_destroy(g->st_manager);
     free(g);
 }
 

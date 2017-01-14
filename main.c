@@ -40,7 +40,7 @@ int main(int argc, char** argv) {
     sfVideoMode mode = {0, 0, 32};
     mode.width = window_size.x;
     mode.height = window_size.y;
-    sfRenderWindow * window = sfRenderWindow_create(mode, "SFML", sfClose, NULL);
+    sfRenderWindow * window = sfRenderWindow_create(mode, "TRON", sfClose, NULL);
     m_game->window = window;
 
     printf("Player 1 => x :%d, y :%d\nPlayer 2 => x:%d, y :%d \n",
@@ -57,13 +57,12 @@ int main(int argc, char** argv) {
 
     //	sfMusic_play(music);
     while (sfRenderWindow_isOpen(window)) {
-        game_main_loop(m_game, window);
+        game_main_loop(m_game);
     }
 
 
     game_destroy(m_game);
     sfRenderWindow_destroy(window);
-
     return (EXIT_SUCCESS);
 }
 
