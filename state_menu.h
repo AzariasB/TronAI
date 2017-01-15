@@ -11,6 +11,7 @@
 #define STATE_MENU_H
 
 #include <stdlib.h>
+#include <SFML/Audio.h>
 #include <SFML/Graphics.h>
 #include "game_state.h"
 #include "utils.h"
@@ -23,6 +24,7 @@ typedef struct state_menu{
     sfText *text_play;
     sfText *text_exit;
     sfText *text_help;
+    sfMusic *music;
 } state_menu;
 
 state_menu *state_menu_create();

@@ -35,6 +35,9 @@ typedef struct game {
     sfRenderWindow *window;
     sfBool paused;
     sfBool ended;
+    
+    sfTexture *background_texture;
+    sfSprite *background_sprite;
 } game;
 
 

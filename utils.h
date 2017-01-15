@@ -18,12 +18,13 @@
 #define BOARD_HEIGHT 20
 
 // The number of pixel for a single cell
-#define CELL_SIDE 20
+#define CELL_SIDE 40
 
 
 #include <stdlib.h>
 #include <SFML/Graphics.h>
 #include <string.h>
+#include <SFML/Audio/Types.h>
 
 #include "direction.h"
 
@@ -48,6 +49,7 @@ sfBool utils_text_contains(sfText *text, float x, float y);
 
 void utils_hilight_text(sfText *text, sfMouseMoveEvent ev);
 
+void utils_toggle_music(sfMusic *music);
 
 #endif /* UTILS_H */
 

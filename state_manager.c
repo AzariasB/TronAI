@@ -29,7 +29,7 @@ state_manager *state_manager_copy(state_manager *m) {
     copy->st_menu = state_menu_copy(m->st_menu);
     copy->st_play = state_play_copy(m->st_play);
     copy->st_pause = state_pause_copy(m->st_pause);
-    
+
     copy->current_state = copy->st_menu->super;
     return copy;
 }

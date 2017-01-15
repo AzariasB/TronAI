@@ -12,6 +12,7 @@
 
 #include <stdlib.h>
 #include <SFML/Graphics.h>
+#include <SFML/Audio/Types.h>
 #include "game_state.h"
 #include "utils.h"
 
@@ -19,6 +20,10 @@ typedef struct game game;
 
 typedef struct state_play {
     game_state *super;
+    sfMusic *music;
+    sfTexture *glow_texture;
+    sfSprite *glow_sprite;
+    
 } state_play;
 
 state_play *state_play_create();

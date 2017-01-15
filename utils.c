@@ -1,5 +1,8 @@
 
 
+#include <SFML/Audio/SoundStatus.h>
+#include <SFML/Audio/Music.h>
+
 #include "utils.h"
 
 #ifdef UTILS_H
@@ -83,4 +86,14 @@ void utils_hilight_text(sfText *text, sfMouseMoveEvent ev) {
         sfText_setColor(text, sfWhite);
     }
 }
+
+void utils_toggle_music(sfMusic* music) {
+    sfSoundStatus status = sfMusic_getStatus(music);
+    if (status == sfPlaying) {
+        sfMusic_pause(music);
+    } else {
+        sfMusic_play(music);
+    }
+}
+
 #endif

@@ -22,6 +22,17 @@ game *game_create() {
     g->ended = sfFalse;
     g->paused = sfTrue;
     g->st_manager = state_manager_create();
+    (*g->st_manager->current_state->resume)(g);
+
+    g->background_texture = sfTexture_createFromFile("background.png", NULL);
+    g->background_sprite = sfSprite_create();
+
+    sfSprite_setTexture(g->background_sprite, g->background_texture, sfFalse);
+
+    sfFloatRect background_bounds = sfSprite_getGlobalBounds(g->background_sprite);
+    sfVector2f background_scale = {(CELL_SIDE * BOARD_WIDTH) / background_bounds.width, (CELL_SIDE * BOARD_HEIGHT) / background_bounds.height};
+    sfSprite_setScale(g->background_sprite, background_scale);
+
     return g;
 }
 
@@ -31,10 +42,11 @@ sfVector2i game_window_size(const game* g) {
 }
 
 void game_main_loop(game* g) {
-    (g->st_manager->current_state->handle_event)(g);
-    (g->st_manager->current_state->update)(g);
+    (*g->st_manager->current_state->handle_event)(g);
+    (*g->st_manager->current_state->update)(g);
     sfRenderWindow_clear(g->window, sfBlack);
-    (g->st_manager->current_state->draw)(g);
+    sfRenderWindow_drawSprite(g->window, g->background_sprite, NULL);
+    (*g->st_manager->current_state->draw)(g);
     sfRenderWindow_display(g->window);
 
 }
@@ -72,18 +84,16 @@ void game_change_state(game* g, char* state_name) {
 
 game *game_copy(const game* g) {
     game *copy = malloc(sizeof (game));
-
-    player *p1_copy = player_copy(g->player1);
-    player *p2_copy = player_copy(g->player2);
-    grid *board_copy = grid_copy(g->board);
-    state_manager *manager_copy = state_manager_copy(g->st_manager);
-    
-    copy->board = board_copy;
-    copy->player1 = p1_copy;
-    copy->player2 = p2_copy;
+    copy->background_texture = sfTexture_copy(g->background_texture);
+    copy->background_sprite = sfSprite_copy(g->background_sprite);
+    copy->board = grid_copy(g->board);
+    copy->player1 = player_copy(g->player1);
+    copy->player2 = player_copy(g->player2);
     copy->paused = g->paused;
-    copy->st_manager = manager_copy;
+    copy->ended = g->ended;
+    copy->st_manager = state_manager_copy(g->st_manager);
     copy->window = g->window;
+    printf("game copied\n");
     return copy;
 }
 
@@ -92,6 +102,9 @@ void game_destroy(game* g) {
     player_destroy(g->player1);
     player_destroy(g->player2);
     state_manager_destroy(g->st_manager);
+    sfSprite_destroy(g->background_sprite);
+    sfTexture_destroy(g->background_texture);
+
     free(g);
 }
 
