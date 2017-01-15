@@ -5,5 +5,7 @@ stardust/
 .dep.inc
 
 *.o
+*.ogg
+*.png
 
 prog
