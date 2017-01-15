@@ -17,13 +17,35 @@
 #include <SFML/System/Vector2.h>
 #include <SFML/Window/Keyboard.h>
 
-
-typedef enum direction{
+/**
+ * an enum for the available direction of the player
+ * The player might go :
+ *  - Up (y - 1)
+ *  - Down (y + 1)
+ *  - Left (x - 1)
+ *  - Right( x + 1) 
+ */
+typedef enum direction {
     DIR_UP, DIR_RIGHT, DIR_DOWN, DIR_LEFT
 } direction;
 
+/**
+ * Returns a vector from the given direction
+ * for example, if the direction is 'up', the vector will be {0, -1}
+ * 
+ * @param d the direction
+ * @return the vector created from the direction
+ */
 sfVector2i direction_to_vector(direction d);
 
+
+/**
+ * Returns the equivalent direction of a keycode
+ * for example sfKeyUp equivalent is DIR_UP
+ * 
+ * @param key_c the keycode
+ * @return the direction from the keycode
+ */
 direction direction_from_key_code(const sfKeyCode key_c);
 
 

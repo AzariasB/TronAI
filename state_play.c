@@ -9,7 +9,6 @@
 state_play *state_play_create() {
     state_play *state = malloc(sizeof (state_play));
     state->super = game_state_create("play");
-    state->super->cleanup = &state_play_cleanup;
     state->super->pause = &state_play_pause;
     state->super->init = &state_play_init;
     state->super->draw = &state_play_draw;
@@ -55,11 +54,6 @@ void state_play_destroy(state_play* s) {
 void state_play_init(game* g) {
 
 }
-
-void state_play_cleanup(game* g) {
-
-}
-
 void state_play_draw(game* g) {
     state_play *st_play = g->st_manager->st_play;
         for (int y = 0; y < g->board->height; y++) {

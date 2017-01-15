@@ -31,8 +31,6 @@ void state_pause_destroy(state_pause *s);
 
 void state_pause_init(game *g);
 
-void state_pause_cleanup(game *g);
-
 void state_pause_pause(game *g);
 
 void state_pause_resume(game *g);

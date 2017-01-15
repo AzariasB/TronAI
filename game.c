@@ -93,7 +93,6 @@ game *game_copy(const game* g) {
     copy->ended = g->ended;
     copy->st_manager = state_manager_copy(g->st_manager);
     copy->window = g->window;
-    printf("game copied\n");
     return copy;
 }
 

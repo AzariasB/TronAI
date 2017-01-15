@@ -18,6 +18,12 @@
 
 typedef struct game game;
 
+/**
+ * This struct 'implements' the game_state interface
+ * This is the 'main' state of the game. The one
+ * where you can actually play the game.
+ * It has a music, and (as a test) a glow texture/sprite
+ */
 typedef struct state_play {
     game_state *super;
     sfMusic *music;
@@ -26,16 +32,24 @@ typedef struct state_play {
     
 } state_play;
 
+/**
+ * Created a state_play
+ * 
+ * @return  the state_play created
+ */
 state_play *state_play_create();
 
+/**
+ * Copies the game state
+ * 
+ * @param s the state_play to copy
+ * @return the state_play copied
+ */
 state_play *state_play_copy(state_play *s);
 
 void state_play_destroy(state_play *s);
 
 void state_play_init(game *g);
-
-
-void state_play_cleanup(game *g);
 
 void state_play_pause(game *g);
 

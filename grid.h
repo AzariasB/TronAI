@@ -20,21 +20,59 @@
 
 #include "player.h"
 
+/**
+ * A grid is a two dimensions array
+ * It has a width and a height, every element of
+ * the grid is initialized with a 0
+ * Then as the game goes on, numbers corresponding to user's id are added
+ */
 typedef struct grid {
 	int ** m_grid;
 	int width;
 	int height;
 } grid;
 
-
+/**
+ * Creates a grid with the given width
+ * and given height
+ * 
+ * @param width the grid's width
+ * @param height the grid's height
+ * @return the created width
+ */
 grid *grid_create(int width, int height);
 
+/**
+ * Copies the grid
+ * 
+ * @param to_copy the grid to copy
+ * @return the copied grid
+ */
 grid *grid_copy(const grid *to_copy);
 
+/**
+ * Test wether the gird can contain the given position
+ * 
+ * @param g the grid
+ * @param pos the position to test
+ * @return wether the position can be in the grid
+ */
 sfBool grid_contains(const grid *g, sfVector2i pos);
 
+/**
+ * Returns the value at the given pos in the given grid
+ * 
+ * @param g the grid
+ * @param pos the position
+ * @return the value of the grid at the given pos
+ */
 int grid_at(const grid *g, sfVector2i pos);
 
+/**
+ * Destroys the grid
+ * 
+ * @param g the grid to destroy
+ */
 void grid_destroy(grid* g);
 
 #endif /* GRID_H */

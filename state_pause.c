@@ -10,7 +10,6 @@
 state_pause *state_pause_create() {
     state_pause *s_p = malloc(sizeof (state_pause));
     s_p->super = game_state_create("pause");
-    s_p->super->cleanup = &state_pause_cleanup;
     s_p->super->pause = &state_pause_pause;
     s_p->super->init = &state_pause_init;
     s_p->super->draw = &state_pause_draw;
@@ -41,10 +40,6 @@ state_pause *state_pause_create() {
 }
 
 void state_pause_init(game *g) {
-
-}
-
-void state_pause_cleanup(game *g) {
 
 }
 
