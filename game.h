@@ -47,6 +47,9 @@ typedef struct game {
     
     sfTexture *background_texture;
     sfSprite *background_sprite;
+
+	sfTexture *background_glow_texture;
+	sfSprite *background_glow_sprite;
 } game;
 
 /**

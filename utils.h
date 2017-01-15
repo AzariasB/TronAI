@@ -18,8 +18,11 @@
 #define BOARD_HEIGHT 20
 
 // The number of pixel for a single cell
-#define CELL_SIDE 40
+#define CELL_SIDE 32
 
+
+#define SCREEN_WIDTH CELL_SIDE * BOARD_WIDTH
+#define SCREEN_HEIGHT CELL_SIDE * BOARD_HEIGHT
 
 #include <stdlib.h>
 #include <SFML/Graphics.h>
