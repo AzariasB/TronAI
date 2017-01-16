@@ -20,10 +20,12 @@ list_node *list_node_copy(list_node* to_copy) {
     return copy;
 }
 
-void *list_node_destroy(list_node* node) {
-    void *data = node->data;
+void list_node_destroy(list_node* node, void (*destroy)(void *)) {
+    if (node->data != NULL) {
+        (*destroy)(node->data);
+    }
+    node->next = NULL;
     free(node);
-    return data;
 }
 
 
@@ -31,99 +33,78 @@ void *list_node_destroy(list_node* node) {
 
 list * list_create() {
     list *l = malloc(sizeof (list));
+    l->head_sentinel = list_node_create(NULL);
+    l->tail_sentinel = list_node_create(NULL);
+    l->head_sentinel->next = l->tail_sentinel;
+    l->tail_sentinel->next = l->tail_sentinel;
     l->size = 0;
-    l->head = NULL;
-
     return l;
 }
 
 list *list_copy(const list *to_copy) {
     list *copy = list_create();
-
     for (int i = 0; i < to_copy->size; i++) {
         list_add(copy, i, list_get(to_copy, i));
     }
     return copy;
 }
 
-void **list_destroy(list *l) {
-    void **data = list_clean(l);
-    free(l);
-    return data;
+void list_destroy(list *l, void (*destroy)(void *)) {
+    list_clear(l, destroy);
+    l->head_sentinel->next = NULL;
+    list_node_destroy(l->head_sentinel, destroy);
+    l->tail_sentinel->next = NULL;
+    list_node_destroy(l->tail_sentinel, destroy);
+    //    free(l);
 }
 
 list_node *list_get_node(const list* a, int index) {
-    if (index < 0 || index >= a->size) {
-        return NULL;
-    } else {
-        list_node* current_node = a->head;
-        for (int i = 0; i < index; i++) {
-            current_node = current_node->next;
-        }
-        return current_node;
+    if (index < 0) {
+        return a->head_sentinel;
+    } else if (index >= a->size) {
+        return a->tail_sentinel;
     }
+    list_node *n = a->head_sentinel->next;
+    while (index > 0) {
+        n = n->next;
+        index--;
+    }
+    return n;
 }
 
 void *list_get(const list*a, int index) {
     list_node *node = list_get_node(a, index);
-    return node ? node->data : NULL;
+    return node->data;
 }
 
 list_node *list_add(list* target, int index, void* data) {
-    if (index < 0 || index > target->size) {
-        fprintf(stderr, "Tried to add node at impossible position\n");
-        index = index > 0 ? index > target->size ? target->size - 1 : index : 0;
-    }
-    list_node *node = list_node_create(data);
-    if (target->head == NULL) {
-        target->head = node;
-    } else if (index == 0) {
-        node->next = target->head;
-        target->head = node;
-    } else {
-        list_node *before = list_get_node(target, index - 1);
-        list_node *after = before->next;
-        before->next = node;
-        if (after) {
-            node->next = after;
-        }
-    }
+    index = index > 0 ? index > target->size ? target->size : index : 0;
+    list_node *before = list_get_node(target, index - 1);
+    list_node *nw_node = list_node_create(data);
+    nw_node->next = before->next;
+    before->next = nw_node;
     target->size++;
-
-    return node;
+    return nw_node;
 }
 
-void *list_remove_node(list* target, int index) {
+void list_remove_node(list* target, int index, void (*destroy)(void *)) {
     index = index > 0 ? index > target->size ? target->size - 1 : index : 0;
-    void *data = NULL;
-    if (index == 0) {
-        list_node *to_rm = target->head;
-        target->head = target->head->next;
-        data = list_node_destroy(to_rm);
-    } else {
-        list_node *before_remove = list_get_node(target, index - 1);
-        if (before_remove != NULL) {
-            list_node *to_rm = before_remove->next;
-            if (index < target->size - 1) {
-                list_node *after_remove = to_rm->next;
-                before_remove->next = after_remove;
-            } else {
-                before_remove->next = NULL;
-            }
-            data = list_node_destroy(to_rm);
-        }
-    }
+    list_node *before = list_get_node(target, index - 1);
+    list_node *to_delete = before->next;
+    before->next = to_delete->next;
+    list_node_destroy(to_delete, destroy);
     target->size--;
-    return data;
 }
 
-void **list_clean(list* target) {
-    void **void_arry = malloc(sizeof (*void_arry) * target->size);
-    int size = target->size;
-    for (int i = 0; i < size; i++) {
-        void_arry[i] = list_remove_node(target, 0);
+void list_clear(list* target, void (*destroy)(void*)) {
+    list_node *current = target->head_sentinel->next;
+    while (current != target->tail_sentinel) {
+        list_node *next = current->next;
+        list_node_destroy(current, destroy);
+        current = next;
     }
-    return void_arry;
+    target->head_sentinel->next = target->tail_sentinel;
+    target->size = 0;
 }
 
 bool list_is_empty(const list* target) {

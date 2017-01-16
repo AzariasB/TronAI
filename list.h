@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#define NELEMS(x)(sizeof(x) / sizeof(*x))
+#include <stdbool.h>
 
 typedef struct list_node {
     struct list_node * next;
@@ -11,13 +11,11 @@ typedef struct list_node {
 } list_node;
 
 typedef struct list {
-    struct list_node * head;
+    list_node * head_sentinel;
+    list_node *tail_sentinel;
     int size;
 } list;
 
-typedef enum {
-    false, true
-} bool;
 
 //List node-relatedf functions
 
@@ -34,7 +32,7 @@ list_node *list_node_copy(list_node *to_copy);
  * @param node
  * @return the data of the node to destroy
  */
-void *list_node_destroy(list_node *node);
+void list_node_destroy(list_node *node, void (*destroy)(void *data));
 
 ///
 
@@ -45,7 +43,7 @@ list *list_create();
 
 list *list_copy(const list *to_copy);
 
-void **list_destroy(list *l);
+void list_destroy(list *l, void (*destroy)(void *) );
 
 list_node *list_get_node(const list *a, int index);
 
@@ -83,7 +81,7 @@ list_node *list_add(list *target, int index, void *data);
  * @param index the index of the element to remove
  * @return the data of the removed node
  */
-void *list_remove_node(list *target, int index);
+void list_remove_node(list *target, int index, void (*destroy)(void *));
 
 /**
  * Deletes all the nodes of the given list
@@ -93,7 +91,7 @@ void *list_remove_node(list *target, int index);
  * @param target the list to clean
  * @return an array of pointer, pointing to the data of each node of the list
  */
-void **list_clean(list *target);
+void list_clear(list *target, void (*destroy)(void *));
 
 //sfBool
 bool list_is_empty(const list *target);
