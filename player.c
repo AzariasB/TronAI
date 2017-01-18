@@ -9,7 +9,7 @@
 
 #ifdef PLAYER_H
 
-player *player_create(int p_id) {
+player *player_create(int p_id, sfBool is_AI) {
     player *p = malloc(sizeof (player));
     p->id = p_id;
     p->m_direction = DIR_UP;
@@ -21,12 +21,14 @@ player *player_create(int p_id) {
     return p;
 }
 
-player *player_copy(const player* p) {
+void *player_copy(void * ptr) {
+    player *p = ptr;
     player *copy = malloc(sizeof (player));
 
     copy->m_direction = p->m_direction;
     copy->position = p->position;
     copy->id = p->id;
+    copy->is_AI = p->is_AI;
 
     return copy;
 }
@@ -52,8 +54,13 @@ sfRectangleShape *player_to_rect(const player* p) {
     return rect;
 }
 
-void player_destroy(player* p) {
+void player_destroy(void* ptr) {
+    player *p = ptr;
     free(p);
+}
+
+void player_update(player* p) {
+    p->position = utils_update_pos(p->position, p->m_direction);
 }
 
 #endif

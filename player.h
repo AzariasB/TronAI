@@ -24,11 +24,12 @@
  * The player can be dead, it has a position
  * ,a direction and an ID
  */
-typedef struct player{
-	sfVector2i position;
-        sfBool is_dead;
-	direction m_direction;
-	int id;
+typedef struct player {
+    sfVector2i position;
+    sfBool is_dead;
+    sfBool is_AI;
+    direction m_direction;
+    int id;
 } player;
 
 /**
@@ -37,7 +38,7 @@ typedef struct player{
  * @param p_id the player's id
  * @return the created player
  */
-player *player_create(int p_id);
+player *player_create(int p_id, sfBool is_AI);
 
 /**
  * Copies the given player
@@ -45,7 +46,7 @@ player *player_create(int p_id);
  * @param p the player to copy
  * @return the copied player
  */
-player *player_copy(const player *p);
+void *player_copy(void *ptr);
 
 /**
  * Creates a rectangleshape from the given player position
@@ -60,7 +61,16 @@ sfRectangleShape *player_to_rect(const player *p);
  * 
  * @param p the player to destroy
  */
-void player_destroy(player *p);
+void player_destroy(void *ptr);
+
+/**
+ * Updates the player position
+ * given its current position
+ * and its direction
+ * 
+ * @param p the player to update
+ */
+void player_update(player *p);
 
 #endif /* PLAYER_H */
 

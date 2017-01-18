@@ -39,15 +39,16 @@ int main(int argc, char** argv) {
     sfRenderWindow * window = sfRenderWindow_create(mode, "TRON", sfClose, NULL);
     m_game->window = window;
 
-    printf("Player 1 => x :%d, y :%d\nPlayer 2 => x:%d, y :%d \n",
-            m_game->player1->position.x,
-            m_game->player1->position.y,
-            m_game->player2->position.x,
-            m_game->player2->position.y);
+    //Check if they're not at the same spot
+    for (int i = 0; i < m_game->players->size; i++) {
+        player *p = list_get(m_game->players, i);
+        printf("Player %d => x: %d, y : %d\n",p->id, p->position.x, p->position.y);
+    }
 
 
     sfRenderWindow_setFramerateLimit(window, 20);
 
+    //Test game copy & destroy
     game *g_cpy = game_copy(m_game);
     game_destroy(g_cpy);
 

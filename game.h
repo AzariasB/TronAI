@@ -23,6 +23,7 @@
 #include "player.h"
 #include "utils.h"
 #include "state_manager.h"
+#include "list.h"
 
 /**
  * The game is the main structure of this project
@@ -35,21 +36,20 @@
  * A sprite and a texture for the background image
  */
 typedef struct game {
-    player *player1;
-    player *player2; //IA
+    list *players;
     grid *board;
-    
+
     state_manager *st_manager;
 
     sfRenderWindow *window;
     sfBool paused;
     sfBool ended;
-    
+
     sfTexture *background_texture;
     sfSprite *background_sprite;
 
-	sfTexture *background_glow_texture;
-	sfSprite *background_glow_sprite;
+    sfTexture *background_glow_texture;
+    sfSprite *background_glow_sprite;
 } game;
 
 /**

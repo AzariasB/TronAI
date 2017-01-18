@@ -6,18 +6,18 @@
 #include "state_play.h"
 #include "state_pause.h"
 
-
 #ifdef GAME_H
 
 game *game_create() {
     game *g = malloc(sizeof (game));
 
-    player *p1 = player_create(1);
-    player *p2 = player_create(2);
+    g->players = list_create();
+    player *p1 = player_create(1, sfFalse);
+    player *p2 = player_create(2, sfTrue);
+    list_push(g->players, p1);
+    list_push(g->players, p2);
     grid *board = grid_create(BOARD_WIDTH, BOARD_HEIGHT);
 
-    g->player1 = p1;
-    g->player2 = p2;
     g->board = board;
     g->ended = sfFalse;
     g->paused = sfTrue;
@@ -85,16 +85,26 @@ sfBool game_cell_is_empty(game* g, sfVector2i pos) {
 }
 
 void game_init_player_pos(game* g) {
-    g->player1->position = utils_vector_random(g->board->width, g->board->height);
-    do {
-        g->player2->position = utils_vector_random(g->board->width, g->board->height);
-    } while (utils_vector_same(g->player1->position, g->player2->position));
-    game_add_player_pos(g, g->player1);
-    game_add_player_pos(g, g->player2);
+    for (int i = 0; i < g->players->size; i++) {
+        sfBool already_taken = sfFalse;
+        sfVector2i rand_pos = utils_vector_random(g->board->width, g->board->height);
+        do {
+            already_taken = sfFalse;
+            rand_pos = utils_vector_random(g->board->width, g->board->height);
+            for (int j = 0; j < i; j++) {
+                player *p = list_get(g->players, j);
+                already_taken = utils_vector_same(p->position, rand_pos) || already_taken;
+
+            }
+        } while (already_taken);
+        player *p = list_get(g->players, i);
+        p->position = rand_pos;
+        grid_set(g->board, p->position, p->id);
+    }
 }
 
 void game_add_player_pos(game* g, player* p) {
-    g->board->m_grid[p->position.y][p->position.x] = p->id;
+    grid_set(g->board, p->position, p->id);
 }
 
 void game_change_state(game* g, char* state_name) {
@@ -108,8 +118,7 @@ game *game_copy(const game* g) {
     copy->background_glow_texture = sfTexture_copy(g->background_glow_texture);
     copy->background_glow_sprite = sfSprite_copy(g->background_glow_sprite);
     copy->board = grid_copy(g->board);
-    copy->player1 = player_copy(g->player1);
-    copy->player2 = player_copy(g->player2);
+    copy->players = list_copy(g->players, &player_copy);
     copy->paused = g->paused;
     copy->ended = g->ended;
     copy->st_manager = state_manager_copy(g->st_manager);
@@ -119,8 +128,7 @@ game *game_copy(const game* g) {
 
 void game_destroy(game* g) {
     grid_destroy(g->board);
-    player_destroy(g->player1);
-    player_destroy(g->player2);
+    list_destroy(g->players, &player_destroy);
     state_manager_destroy(g->st_manager);
     sfSprite_destroy(g->background_sprite);
     sfTexture_destroy(g->background_texture);

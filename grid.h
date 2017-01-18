@@ -61,12 +61,26 @@ sfBool grid_contains(const grid *g, sfVector2i pos);
 
 /**
  * Returns the value at the given pos in the given grid
+ * If the position is not valid, will print an error
+ * and return 0
  * 
  * @param g the grid
  * @param pos the position
  * @return the value of the grid at the given pos
  */
 int grid_at(const grid *g, sfVector2i pos);
+
+/**
+ * Set the given value at the given position
+ * in the given grid
+ * If the position is not valid,
+ * will print a message and do nothing
+ * 
+ * @param g the grid to use
+ * @param pos the position where to put the value
+ * @param value the value to set
+ */
+void grid_set(grid *g, sfVector2i pos, int value);
 
 /**
  * Destroys the grid

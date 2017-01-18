@@ -2,6 +2,7 @@
 
 #include "game.h"
 #include "state_play.h"
+#include "AI.h"
 
 
 #ifdef STATE_PLAY_H
@@ -56,22 +57,18 @@ void state_play_init(game* g) {
 }
 
 void state_play_draw(game* g) {
-    state_play *st_play = g->st_manager->st_play;
+    //                sfVector2f glow_position = {CELL_SIDE * g->player1->position.x, CELL_SIDE * g->player1->position.y};
+    //    state_play *st_play = g->st_manager->st_play;
     for (int y = 0; y < g->board->height; y++) {
         for (int x = 0; x < g->board->width; x++) {
             int m_v = g->board->m_grid[y][x];
-            //            printf("x : %d, y: %d, v:%d\n", x, y, m_v);
-            if (m_v == g->player1->id) {
-                sfVector2f glow_position = {CELL_SIDE * g->player1->position.x, CELL_SIDE * g->player1->position.y};
-                sfSprite_setPosition(st_play->glow_sprite, glow_position);
-
-                sfRectangleShape *shape = utils_rec_from_xy_color(x, y, g->player1->id);
-                sfRenderWindow_drawRectangleShape(g->window, shape, NULL);
-                sfRenderWindow_drawSprite(g->window, st_play->glow_sprite, NULL);
-
-            } else if (m_v == g->player2->id) {
-                sfRectangleShape *shape = utils_rec_from_xy_color(x, y, g->player2->id);
-                sfRenderWindow_drawRectangleShape(g->window, shape, NULL);
+            for (int p_index = 0; p_index < g->players->size; p_index++) {
+                player *m_player = list_get(g->players, p_index);
+                if (m_v == m_player->id) {
+                    sfRectangleShape *shape = utils_rec_from_xy_color(x, y, m_player->id);
+                    sfRenderWindow_drawRectangleShape(g->window, shape, NULL);
+                    break;
+                }
             }
         }
     }
@@ -89,14 +86,25 @@ void state_play_resume(game* g) {
 
 void state_play_update(game* g) {
     if (!g->paused && !g->ended) {
-        sfVector2i nw_pos = utils_update_pos(g->player1->position, g->player1->m_direction);
-        g->player1->position = nw_pos;
-        if (game_player_is_dead(g, g->player1)) {
-            printf("Tu es mort\n");
-            g->ended = sfTrue;
-            g->paused = sfTrue;
-        } else {
-            game_add_player_pos(g, g->player1);
+        list *l = g->players;
+        for (int i = 0; i < l->size; i++) {
+            player *p = list_get(l, i);
+            if (p->is_AI) {
+                printf("IA playing\n");
+                grid *g_cpy = grid_copy(g->board);
+                list *p_copy = list_copy(l, &player_copy);
+                p->m_direction = ia_play(g_cpy, p_copy, p->id);
+                grid_destroy(g_cpy);
+                list_destroy(l, &player_destroy);
+            }
+            player_update(p);
+            if (game_player_is_dead(g, p)) {
+                g->ended = sfTrue;
+                g->paused = sfTrue;
+                printf("Someone's dead : player number %d\n", p->id);
+            }else{
+                game_add_player_pos(g, p);
+            }
         }
     }
 
@@ -108,7 +116,8 @@ void state_play_handle_event(game* g, sfEvent event) {
             game_change_state(g, "pause");
         } else if (utils_is_valid_key(event.key.code)) {
             g->paused = sfFalse;
-            g->player1->m_direction = direction_from_key_code(event.key.code);
+            player *human = list_get(g->players, 0); //The first player is the human player
+            human->m_direction = direction_from_key_code(event.key.code);
         }
     }
 }
