@@ -24,6 +24,7 @@
 #include "utils.h"
 #include "state_manager.h"
 #include "list.h"
+#include "audio_manager.h"
 
 /**
  * The game is the main structure of this project
@@ -40,6 +41,7 @@ typedef struct game {
     grid *board;
 
     state_manager *st_manager;
+    audio_manager *audio_manager;
 
     sfRenderWindow *window;
     sfBool paused;

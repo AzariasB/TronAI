@@ -23,7 +23,6 @@ typedef struct state_menu{
     sfText *text_menu;
     sfText *text_play;
     sfText *text_exit;
-    sfMusic *music;
 } state_menu;
 
 state_menu *state_menu_create();

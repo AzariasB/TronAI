@@ -22,6 +22,7 @@ game *game_create() {
     g->ended = sfFalse;
     g->paused = sfTrue;
     g->st_manager = state_manager_create();
+    g->audio_manager = audio_manager_create();
     (*g->st_manager->current_state->resume)(g);
 
     g->background_texture = sfTexture_createFromFile("background.png", NULL);
@@ -122,6 +123,7 @@ game *game_copy(const game* g) {
     copy->paused = g->paused;
     copy->ended = g->ended;
     copy->st_manager = state_manager_copy(g->st_manager);
+    copy->audio_manager = NULL; //can't copy audio_manager because can't copy sfMusic
     copy->window = g->window;
     return copy;
 }
@@ -130,6 +132,9 @@ void game_destroy(game* g) {
     grid_destroy(g->board);
     list_destroy(g->players, &player_destroy);
     state_manager_destroy(g->st_manager);
+    if (g->audio_manager != NULL) {
+        audio_manager_destroy(g->audio_manager);
+    }
     sfSprite_destroy(g->background_sprite);
     sfTexture_destroy(g->background_texture);
     sfSprite_destroy(g->background_glow_sprite);

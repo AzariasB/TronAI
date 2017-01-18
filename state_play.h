@@ -26,7 +26,6 @@ typedef struct game game;
  */
 typedef struct state_play {
     game_state *super;
-    sfMusic *music;
     sfTexture *glow_texture;
     sfSprite *glow_sprite;
     

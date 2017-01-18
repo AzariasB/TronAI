@@ -16,8 +16,6 @@ state_play *state_play_create() {
     state->super->handle_event = &state_play_handle_event;
     state->super->resume = &state_play_resume;
     state->super->update = &state_play_update;
-    state->music = sfMusic_createFromFile("play_music.ogg");
-    sfMusic_setLoop(state->music, sfTrue);
 
     state->glow_texture = sfTexture_createFromFile("glow.png", NULL);
     state->glow_sprite = sfSprite_create();
@@ -38,7 +36,6 @@ state_play *state_play_create() {
 state_play* state_play_copy(state_play* s) {
     state_play *copy = malloc(sizeof (state_play));
     copy->super = game_state_copy(s->super);
-    copy->music = sfMusic_createFromFile("play_music.ogg");
     copy->glow_texture = sfTexture_copy(s->glow_texture);
     copy->glow_sprite = sfSprite_copy(s->glow_sprite);
     return copy;
@@ -46,7 +43,6 @@ state_play* state_play_copy(state_play* s) {
 
 void state_play_destroy(state_play* s) {
     game_state_destroy(s->super);
-    sfMusic_destroy(s->music);
     sfSprite_destroy(s->glow_sprite);
     sfTexture_destroy(s->glow_texture);
     free(s);
@@ -76,12 +72,11 @@ void state_play_draw(game* g) {
 
 void state_play_pause(game* g) {
     g->paused = sfTrue;
-    sfMusic_pause(g->st_manager->st_play->music);
 }
 
 void state_play_resume(game* g) {
     g->paused = sfTrue; //Wait for user input
-    sfMusic_play(g->st_manager->st_play->music);
+    audio_manager_change_music(g->audio_manager, MUSIC_PLAY);
 }
 
 void state_play_update(game* g) {
@@ -102,7 +97,7 @@ void state_play_update(game* g) {
                 g->ended = sfTrue;
                 g->paused = sfTrue;
                 printf("Someone's dead : player number %d\n", p->id);
-            }else{
+            } else {
                 game_add_player_pos(g, p);
             }
         }

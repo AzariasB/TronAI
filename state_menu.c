@@ -2,6 +2,7 @@
 
 #include "state_menu.h"
 #include "game.h"
+#include "audio_manager.h"
 
 #ifdef STATE_MENU_H
 
@@ -30,8 +31,6 @@ state_menu *state_menu_create() {
     sfVector2f exit_pos = {0, 175};
     sfText_setPosition(menu->text_exit, exit_pos);
 
-    menu->music = sfMusic_createFromFile("menu_music.ogg");
-
     return menu;
 }
 
@@ -40,13 +39,12 @@ void state_menu_init(game *g) {
 }
 
 void state_menu_pause(game *g) {
-    state_menu *m = g->st_manager->st_menu;
-    sfMusic_stop(m->music);
+    //    state_menu *m = g->st_manager->st_menu;
 }
 
 void state_menu_resume(game *g) {
-    state_menu *m = g->st_manager->st_menu;
-    sfMusic_play(m->music);
+    audio_manager_change_music(g->audio_manager, MUSIC_MENU);
+    //    state_menu *m = g->st_manager->st_menu;
 }
 
 void state_menu_handle_event(game *g, sfEvent event) {
@@ -108,7 +106,6 @@ state_menu *state_menu_copy(state_menu* s) {
     copy->text_exit = sfText_copy(s->text_exit);
     copy->text_menu = sfText_copy(s->text_menu);
     copy->text_play = sfText_copy(s->text_play);
-    copy->music = sfMusic_createFromFile("menu_music.ogg");
 
     return copy;
 }
@@ -118,7 +115,6 @@ void state_menu_destroy(state_menu *s) {
     sfText_destroy(s->text_menu);
     sfText_destroy(s->text_play);
     sfText_destroy(s->text_exit);
-    sfMusic_destroy(s->music);
     free(s);
 }
 
