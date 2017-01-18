@@ -55,7 +55,7 @@ void state_play_pause(game *g);
 
 void state_play_resume(game *g);
 
-void state_play_handle_event(game *g);
+void state_play_handle_event(game *g, sfEvent event);
 
 void state_play_update(game *g);
 

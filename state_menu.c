@@ -49,24 +49,15 @@ void state_menu_resume(game *g) {
     sfMusic_play(m->music);
 }
 
-void state_menu_handle_event(game *g) {
-    //Handle click
-    sfEvent event;
-    state_menu *st_menu = g->st_manager->st_menu;
-    while (sfRenderWindow_pollEvent(g->window, &event)) {
-        if (event.type == sfEvtClosed) {
-            sfRenderWindow_close(g->window);
-        } else if (event.type == sfEvtKeyPressed) {
-            if (event.key.code == sfKeySpace) {
-                game_change_state(g, "play");
-            } else if (event.key.code == sfKeyM) {
-                utils_toggle_music(st_menu->music);
-            }
-        } else if (event.type == sfEvtMouseButtonPressed) {
-            state_menu_button_clicked(g, event.mouseButton);
-        } else if (event.type == sfEvtMouseMoved) {
-            state_menu_mouse_moved(g->st_manager->st_menu, event.mouseMove);
+void state_menu_handle_event(game *g, sfEvent event) {
+    if (event.type == sfEvtKeyPressed) {
+        if (event.key.code == sfKeySpace) {
+            game_change_state(g, "play");
         }
+    } else if (event.type == sfEvtMouseButtonPressed) {
+        state_menu_button_clicked(g, event.mouseButton);
+    } else if (event.type == sfEvtMouseMoved) {
+        state_menu_mouse_moved(g->st_manager->st_menu, event.mouseMove);
     }
 }
 

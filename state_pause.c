@@ -51,19 +51,14 @@ void state_pause_resume(game *g) {
     g->paused = sfFalse;
 }
 
-void state_pause_handle_event(game *g) {
+void state_pause_handle_event(game *g, sfEvent event) {
     //Handle click
-    sfEvent event;
-    while (sfRenderWindow_pollEvent(g->window, &event)) {
-        if (event.type == sfEvtClosed) {
-            sfRenderWindow_close(g->window);
-        } else if (event.type == sfEvtKeyPressed && event.key.code == sfKeySpace) {
-            game_change_state(g, "play");
-        } else if (event.type == sfEvtMouseButtonPressed) {
-            state_pause_button_clicked(g, event.mouseButton);
-        } else if (event.type == sfEvtMouseMoved) {
-            state_pause_mouse_moved(g->st_manager->st_pause, event.mouseMove);
-        }
+    if (event.type == sfEvtKeyPressed && event.key.code == sfKeySpace) {
+        game_change_state(g, "play");
+    } else if (event.type == sfEvtMouseButtonPressed) {
+        state_pause_button_clicked(g, event.mouseButton);
+    } else if (event.type == sfEvtMouseMoved) {
+        state_pause_mouse_moved(g->st_manager->st_pause, event.mouseMove);
     }
 }
 

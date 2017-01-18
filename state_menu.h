@@ -40,7 +40,7 @@ void state_menu_pause(game *g);
 
 void state_menu_resume(game *g);
 
-void state_menu_handle_event(game *g);
+void state_menu_handle_event(game *g, sfEvent event);
 
 void state_menu_update(game *g);
 

@@ -28,7 +28,7 @@ state_play *state_play_create() {
 
 
     sfFloatRect s_bouds = sfSprite_getGlobalBounds(state->glow_sprite);
-    sfVector2f g_scale = { CELL_SIDE / s_bouds.width, CELL_SIDE / s_bouds.height};
+    sfVector2f g_scale = {CELL_SIDE / s_bouds.width, CELL_SIDE / s_bouds.height};
     sfSprite_setScale(state->glow_sprite, g_scale);
 
     return state;
@@ -54,9 +54,10 @@ void state_play_destroy(state_play* s) {
 void state_play_init(game* g) {
 
 }
+
 void state_play_draw(game* g) {
     state_play *st_play = g->st_manager->st_play;
-        for (int y = 0; y < g->board->height; y++) {
+    for (int y = 0; y < g->board->height; y++) {
         for (int x = 0; x < g->board->width; x++) {
             int m_v = g->board->m_grid[y][x];
             //            printf("x : %d, y: %d, v:%d\n", x, y, m_v);
@@ -101,20 +102,13 @@ void state_play_update(game* g) {
 
 }
 
-void state_play_handle_event(game* g) {
-    sfEvent event;
-    while (sfRenderWindow_pollEvent(g->window, &event)) {
-        if (event.type == sfEvtClosed) {
-            sfRenderWindow_close(g->window);
-        } else if (event.type == sfEvtKeyPressed) {
-            if (event.key.code == sfKeySpace) {
-                game_change_state(g, "pause");
-            } else if (event.key.code == sfKeyM) {
-                utils_toggle_music(g->st_manager->st_play->music);
-            } else if (utils_is_valid_key(event.key.code)) {
-                g->paused = sfFalse;
-                g->player1->m_direction = direction_from_key_code(event.key.code);
-            }
+void state_play_handle_event(game* g, sfEvent event) {
+    if (event.type == sfEvtKeyPressed) {
+        if (event.key.code == sfKeySpace) {
+            game_change_state(g, "pause");
+        } else if (utils_is_valid_key(event.key.code)) {
+            g->paused = sfFalse;
+            g->player1->m_direction = direction_from_key_code(event.key.code);
         }
     }
 }
