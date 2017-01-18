@@ -12,11 +12,11 @@ list_node *list_node_create(void* data) {
     return node;
 }
 
-list_node *list_node_copy(list_node* to_copy) {
-    list_node *copy = list_node_create(to_copy->data);
-    if (to_copy->next && to_copy->next != NULL) {
-        copy->next = list_node_copy(to_copy->next);
-    }
+list_node *list_node_copy(list_node* to_copy, void *(*copier)(void *)) {
+
+    void *data_copy = to_copy->data == NULL ? NULL : (*copier)(to_copy->data);
+    list_node *copy = list_node_create(data_copy);
+    copy->next = NULL;
     return copy;
 }
 
@@ -41,10 +41,12 @@ list * list_create() {
     return l;
 }
 
-list *list_copy(const list *to_copy) {
+list *list_copy(const list *to_copy, void *(*copier)(void*)) {
     list *copy = list_create();
     for (int i = 0; i < to_copy->size; i++) {
-        list_add(copy, i, list_get(to_copy, i));
+        list_node *node_to_copy = list_get(to_copy, i);
+        list_node *node_copy = list_node_copy(node_to_copy, copier);
+        list_add(copy, i, node_copy);
     }
     return copy;
 }
@@ -61,9 +63,11 @@ void list_destroy(list *l, void (*destroy)(void *)) {
 list_node *list_get_node(const list* a, int index) {
     if (index < 0) {
         return a->head_sentinel;
-    } else if (index >= a->size) {
-        return a->tail_sentinel;
     }
+    if (index > a->size) {
+        index = a->size - 1;
+    }
+
     list_node *n = a->head_sentinel->next;
     while (index > 0) {
         n = n->next;
@@ -87,7 +91,17 @@ list_node *list_add(list* target, int index, void* data) {
     return nw_node;
 }
 
+list_node *list_push(list* target, void* data) {
+    return list_add(target, target->size, data);
+}
+
+void list_pop(list* target, void(*destroyer)(void*)) {
+    list_remove_node(target, target->size - 1, destroyer);
+}
+
 void list_remove_node(list* target, int index, void (*destroy)(void *)) {
+    if (list_is_empty(target))
+        return;
     index = index > 0 ? index > target->size ? target->size - 1 : index : 0;
     list_node *before = list_get_node(target, index - 1);
     list_node *to_delete = before->next;

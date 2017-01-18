@@ -21,7 +21,7 @@ typedef struct list {
 
 list_node *list_node_create(void *data);
 
-list_node *list_node_copy(list_node *to_copy);
+list_node *list_node_copy(list_node *to_copy, void *(*copier)(void *));
 
 /**
  * Destroys the list_node, without
@@ -41,9 +41,17 @@ void list_node_destroy(list_node *node, void (*destroy)(void *data));
 
 list *list_create();
 
-list *list_copy(const list *to_copy);
+/**
+ * Copies every element of the list
+ * in a new list
+ * 
+ * @param to_copy the list to copy
+ * @param copier the function to use to copy a single element 
+ * @return the copied list
+ */
+list *list_copy(const list *to_copy, void *(*copier)(void *));
 
-void list_destroy(list *l, void (*destroy)(void *) );
+void list_destroy(list *l, void (*destroy)(void *));
 
 list_node *list_get_node(const list *a, int index);
 
@@ -69,6 +77,24 @@ void *list_get(const list* a, int index);
  * @return
  */
 list_node *list_add(list *target, int index, void *data);
+
+/**
+ * Add the data at the end of the list
+ * 
+ * @param target the list to use
+ * @param data the data to push in the list
+ * @return the node created
+ */
+list_node *list_push(list *target, void *data);
+
+
+/**
+ * Remove the last element of the list
+ * 
+ * @param target the list to use
+ * @param destroyer the function to destroy the last element
+ */
+void list_pop(list * target, void (*destroyer)(void*));
 
 /**
  *Delete the node at the given index
