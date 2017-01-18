@@ -1,4 +1,4 @@
-TARGET = prog
+TARGET = game
 LIBS = -lm -lcsfml-graphics -lcsfml-window -lcsfml-system -lcsfml-audio
 CC = gcc
 CFLAGS = -g -Wall -std=c11 # -O0 -v -da -Q

@@ -1,11 +1,15 @@
 
 nbproject/
 stardust/
+build/
 
 .dep.inc
 
 *.o
 *.ogg
 *.png
+*.mp4
+
 
 prog
+game
