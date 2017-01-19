@@ -144,5 +144,13 @@ void game_init_player_pos(game *g);
  */
 void game_destroy(game* g);
 
+/**
+ * Properly exits the game
+ * (does cleanup an everything)
+ * 
+ * @param g the game
+ */
+void game_exit(game *g);
+
 #endif /* GAME_H */
 

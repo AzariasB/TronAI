@@ -24,6 +24,9 @@
 #define SCREEN_WIDTH CELL_SIDE * BOARD_WIDTH
 #define SCREEN_HEIGHT CELL_SIDE * BOARD_HEIGHT
 
+#define MIN(a,b)(a > b ? b : a)
+#define MAX(a,b)(a > b ? a : b)
+
 #include <stdlib.h>
 #include <SFML/Graphics.h>
 #include <string.h>

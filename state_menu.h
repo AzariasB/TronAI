@@ -15,14 +15,13 @@
 #include <SFML/Graphics.h>
 #include "game_state.h"
 #include "utils.h"
+#include "menu.h"
 
 typedef struct game game;
 
-typedef struct state_menu{
+typedef struct state_menu {
     game_state *super;
-    sfText *text_menu;
-    sfText *text_play;
-    sfText *text_exit;
+    menu *menu;
 } state_menu;
 
 state_menu *state_menu_create();
@@ -42,11 +41,6 @@ void state_menu_resume(game *g);
 void state_menu_handle_event(game *g, sfEvent event);
 
 void state_menu_update(game *g);
-
-
-void state_menu_button_clicked(game *g, sfMouseButtonEvent ev);
-
-void state_menu_mouse_moved(state_menu *s, sfMouseMoveEvent ev);
 
 #endif /* STATE_MENU_H */
 

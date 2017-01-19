@@ -6,32 +6,31 @@
 
 #ifdef STATE_MENU_H
 
+void state_menu_clicked_exit(game *g, sfEvent ev) {
+    game_exit(g);
+}
+
+void state_menu_clicked_play(game *g, sfEvent ev) {
+    game_change_state(g, "play");
+}
+
 state_menu *state_menu_create() {
-    state_menu *menu = utils_safe_malloc(sizeof(state_menu), "Creating menu state");
-    menu->super = game_state_create("menu");
+    state_menu *st_menu = utils_safe_malloc(sizeof (state_menu), "Creating menu state");
+    st_menu->super = game_state_create("menu");
 
-    menu->super->pause = &state_menu_pause;
-    menu->super->init = &state_menu_init;
-    menu->super->draw = &state_menu_draw;
-    menu->super->handle_event = &state_menu_handle_event;
-    menu->super->resume = &state_menu_resume;
-    menu->super->update = &state_menu_update;
+    st_menu->super->pause = &state_menu_pause;
+    st_menu->super->init = &state_menu_init;
+    st_menu->super->draw = &state_menu_draw;
+    st_menu->super->handle_event = &state_menu_handle_event;
+    st_menu->super->resume = &state_menu_resume;
+    st_menu->super->update = &state_menu_update;
 
-    menu->text_menu = utils_create_text("Menu", 110);
-    menu->text_play = utils_create_text("Play", 75);
-    menu->text_exit = utils_create_text("Exit", 75);
-
-    sfVector2f menu_pos = {0, 0};
-    sfText_setPosition(menu->text_menu, menu_pos);
-
-    sfVector2f play_pos = {0, 100};
-    sfText_setPosition(menu->text_play, play_pos);
+    st_menu->menu = menu_create("Menu");
+    menu_add_text(st_menu->menu, "Play", &state_menu_clicked_play);
+    menu_add_text(st_menu->menu, "Exit", &state_menu_clicked_exit);
 
 
-    sfVector2f exit_pos = {0, 175};
-    sfText_setPosition(menu->text_exit, exit_pos);
-
-    return menu;
+    return st_menu;
 }
 
 void state_menu_init(game *g) {
@@ -48,52 +47,13 @@ void state_menu_resume(game *g) {
 }
 
 void state_menu_handle_event(game *g, sfEvent event) {
-    if (event.type == sfEvtKeyPressed) {
-        if (event.key.code == sfKeySpace) {
-            game_change_state(g, "play");
-        }
-    } else if (event.type == sfEvtMouseButtonPressed) {
-        state_menu_button_clicked(g, event.mouseButton);
-    } else if (event.type == sfEvtMouseMoved) {
-        state_menu_mouse_moved(g->st_manager->st_menu, event.mouseMove);
-    }
-}
-
-void state_menu_mouse_moved(state_menu *s, sfMouseMoveEvent ev) {
-    utils_hilight_text(s->text_play, ev);
-    utils_hilight_text(s->text_exit, ev);
-}
-
-void state_menu_button_clicked(game* g, sfMouseButtonEvent ev) {
-    //Check resume
     state_menu *st_menu = g->st_manager->st_menu;
-
-    if (utils_text_contains(st_menu->text_play, ev.x, ev.y)) {
-        game_change_state(g, "play");
-    } else if (utils_text_contains(st_menu->text_exit, ev.x, ev.y)) {
-        sfRenderWindow_close(g->window);
-    }
-
-    state_pause *st_pause = g->st_manager->st_pause;
-    if (utils_text_contains(st_pause->resume_texte, ev.x, ev.y)) {
-        game_change_state(g, "play");
-        return;
-        //change state - return
-    } else if (utils_text_contains(st_pause->exit_text, ev.x, ev.y)) {
-        //Change state -return
-        sfRenderWindow_close(g->window);
-        return;
-    } else if (utils_text_contains(st_pause->menu_text, ev.x, ev.y)) {
-        game_change_state(g, "menu");
-        return;
-    }
+    menu_handle_event(st_menu->menu, g, event);
 }
 
 void state_menu_draw(game* g) {
     state_menu *m = g->st_manager->st_menu;
-    sfRenderWindow_drawText(g->window, m->text_menu, NULL);
-    sfRenderWindow_drawText(g->window, m->text_play, NULL);
-    sfRenderWindow_drawText(g->window, m->text_exit, NULL);
+    menu_draw(m->menu, g->window);
 }
 
 void state_menu_update(game *g) {
@@ -101,20 +61,16 @@ void state_menu_update(game *g) {
 }
 
 state_menu *state_menu_copy(state_menu* s) {
-    state_menu *copy = utils_safe_malloc(sizeof(state_manager), "copying state menu");
+    state_menu *copy = utils_safe_malloc(sizeof (state_manager), "copying state menu");
     copy->super = game_state_copy(s->super);
-    copy->text_exit = sfText_copy(s->text_exit);
-    copy->text_menu = sfText_copy(s->text_menu);
-    copy->text_play = sfText_copy(s->text_play);
+    copy->menu = menu_copy(s->menu);
 
     return copy;
 }
 
 void state_menu_destroy(state_menu *s) {
     game_state_destroy(s->super);
-    sfText_destroy(s->text_menu);
-    sfText_destroy(s->text_play);
-    sfText_destroy(s->text_exit);
+    menu_destroy(s->menu);
     free(s);
 }
 

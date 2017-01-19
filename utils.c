@@ -70,6 +70,7 @@ sfText *utils_create_text(char* content, int charSize) {
     sfText_setCharacterSize(text, charSize);
     sfText_setString(text, content);
 
+    //Memory leak ... 
     sfFont *tron_font = sfFont_createFromFile("tron.ttf");
     sfText_setFont(text, tron_font);
     return text;

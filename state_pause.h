@@ -14,13 +14,12 @@
 
 #include "game_state.h"
 #include "utils.h"
+#include "menu.h"
 
 typedef struct state_pause {
     game_state *super;
-    sfText *pause_text;
-    sfText *resume_texte;
-    sfText *exit_text;
-    sfText *menu_text;
+
+    menu *menu;
 } state_pause;
 
 state_pause *state_pause_create();
@@ -40,10 +39,6 @@ void state_pause_handle_event(game *g, sfEvent event);
 void state_pause_update(game *g);
 
 void state_pause_draw(game *g);
-
-void state_pause_button_clicked(game *g, sfMouseButtonEvent ev);
-
-void state_pause_mouse_moved(state_pause *p, sfMouseMoveEvent ev);
 
 #endif /* STATE_PAUSE_H */
 
