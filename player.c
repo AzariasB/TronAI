@@ -13,7 +13,7 @@ player *player_create(int p_id, sfBool is_AI) {
     player *p = malloc(sizeof (player));
     p->id = p_id;
     p->m_direction = DIR_UP;
-
+    p->is_AI = is_AI;
     sfVector2i position;
     position.x = 0;
     position.y = 0;

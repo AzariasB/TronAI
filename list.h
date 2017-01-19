@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
+#include <SFML/Config.h>
 
 typedef struct list_node {
     struct list_node * next;
@@ -119,9 +119,44 @@ void list_remove_node(list *target, int index, void (*destroy)(void *));
  */
 void list_clear(list *target, void (*destroy)(void *));
 
-//sfBool
-bool list_is_empty(const list *target);
 
-//
+/**
+ * Returns wether the list is empty
+ * 
+ * @param target the list to check
+ * @return wether the list is empty
+ */
+sfBool list_is_empty(const list *target);
+
+/**
+ * Filters the list with the given predicate
+ * and returns a newly created list containing only
+ * the elements with a 'true' predicate
+ * 
+ * @param to_filter the list to filter
+ * @param predicate a function that returs wether to keep the data
+ * @return the filtered list
+ */
+list *list_filter(const list *to_filter, void *(*copier)(void *), sfBool(*predicate)(void *));
+
+
+/**
+ * Creates a new list and changes all the element of the 
+ * list with the given function
+ * 
+ * @param to_map the list to map
+ * @param mapper the function to transform the element of the list
+ * @return a mapped list
+ */
+list *list_map(const list *to_map, void *(*copier)(void *), void (*mapper)(void *));
+
+/**
+ * Iterate over the elements of the list
+ * and call the function for each element
+ * 
+ * @param to_each  the list to iterate over
+ * @param func the function to call for each element of the list
+ */
+void list_each(const list *to_each, void (*func)(void *));
 
 #endif

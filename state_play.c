@@ -63,6 +63,7 @@ void state_play_draw(game* g) {
                 if (m_v == m_player->id) {
                     sfRectangleShape *shape = utils_rec_from_xy_color(x, y, m_player->id);
                     sfRenderWindow_drawRectangleShape(g->window, shape, NULL);
+                    sfRectangleShape_destroy(shape);
                     break;
                 }
             }
@@ -85,12 +86,11 @@ void state_play_update(game* g) {
         for (int i = 0; i < l->size; i++) {
             player *p = list_get(l, i);
             if (p->is_AI) {
-                printf("IA playing\n");
                 grid *g_cpy = grid_copy(g->board);
                 list *p_copy = list_copy(l, &player_copy);
                 p->m_direction = ia_play(g_cpy, p_copy, p->id);
                 grid_destroy(g_cpy);
-                list_destroy(l, &player_destroy);
+                list_destroy(p_copy, &player_destroy);
             }
             player_update(p);
             if (game_player_is_dead(g, p)) {

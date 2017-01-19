@@ -13,7 +13,6 @@ list_node *list_node_create(void* data) {
 }
 
 list_node *list_node_copy(list_node* to_copy, void *(*copier)(void *)) {
-
     void *data_copy = to_copy->data == NULL ? NULL : (*copier)(to_copy->data);
     list_node *copy = list_node_create(data_copy);
     copy->next = NULL;
@@ -44,9 +43,9 @@ list * list_create() {
 list *list_copy(const list *to_copy, void *(*copier)(void*)) {
     list *copy = list_create();
     for (int i = 0; i < to_copy->size; i++) {
-        list_node *node_to_copy = list_get(to_copy, i);
-        list_node *node_copy = list_node_copy(node_to_copy, copier);
-        list_add(copy, i, node_copy);
+        void *data_to_copy = list_get(to_copy, i);
+        void *data_copy = (*copier)(data_to_copy);
+        list_add(copy, i, data_copy);
     }
     return copy;
 }
@@ -111,17 +110,51 @@ void list_remove_node(list* target, int index, void (*destroy)(void *)) {
 }
 
 void list_clear(list* target, void (*destroy)(void*)) {
-    list_node *current = target->head_sentinel->next;
-    while (current != target->tail_sentinel) {
-        list_node *next = current->next;
-        list_node_destroy(current, destroy);
-        current = next;
+//    list_node *current = target->head_sentinel->next;
+    while(target->size > 0){
+        list_pop(target, destroy);
     }
+//    while (current != target->tail_sentinel) {
+//        list_node *next = current->next;
+//        list_node_destroy(current, destroy);
+//        current = next;
+//    }
     target->head_sentinel->next = target->tail_sentinel;
     target->size = 0;
 }
 
-bool list_is_empty(const list* target) {
+list *list_filter(const list* to_filter, void *(*copier)(void *), sfBool(*predicate)(void*)) {
+    list *filtered = list_create();
+    for (int i = 0; i < to_filter->size; i++) {
+        void *data = list_get(to_filter, i);
+        sfBool pred = (*predicate)(data);
+        if (pred) {
+            void *data_cpy = (*copier)(data);
+            list_push(filtered, data_cpy);
+        }
+    }
+    return filtered;
+}
+
+list *list_map(const list* to_map, void *(*copier)(void *), void (*mapper)(void*)) {
+    list *mapped = list_create();
+    for (int i = 0; i < to_map->size; i++) {
+        void *data = list_get(to_map, i);
+        void *data_cpy = (*copier)(data);
+        (*mapper)(data_cpy);
+        list_push(mapped, data_cpy);
+    }
+    return mapped;
+}
+
+void list_each(const list* to_each, void(*func)(void*)) {
+    for (int i = 0; i < to_each->size; i++) {
+        void *data = list_get(to_each, i);
+        (*func)(data);
+    }
+}
+
+sfBool list_is_empty(const list* target) {
     return target->size == 0;
 }
 
