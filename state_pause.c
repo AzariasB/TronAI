@@ -8,7 +8,7 @@
 #ifdef STATE_PAUSE_H
 
 state_pause *state_pause_create() {
-    state_pause *s_p = malloc(sizeof (state_pause));
+    state_pause *s_p = utils_safe_malloc(sizeof(state_pause), "Creating state pause");
     s_p->super = game_state_create("pause");
     s_p->super->pause = &state_pause_pause;
     s_p->super->init = &state_pause_init;
@@ -99,7 +99,7 @@ void state_pause_draw(game *g) {
 }
 
 state_pause *state_pause_copy(state_pause* s) {
-    state_pause *copy = malloc(sizeof (state_pause));
+    state_pause *copy = utils_safe_malloc(sizeof(state_pause), "Copying state pause");
     copy->exit_text = sfText_copy(s->exit_text);
     copy->menu_text = sfText_copy(s->menu_text);
     copy->pause_text = sfText_copy(s->pause_text);

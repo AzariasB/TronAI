@@ -12,6 +12,7 @@
 typedef struct game game;
 
 #include <SFML/Window/Event.h>
+#include <string.h>
 /**
  * A game state is an interface
  * The game state has a name

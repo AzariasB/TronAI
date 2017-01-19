@@ -2,6 +2,7 @@
 
 #include <SFML/Audio/SoundStatus.h>
 #include <SFML/Audio/Music.h>
+#include <stdio.h>
 
 #include "utils.h"
 
@@ -94,6 +95,15 @@ void utils_toggle_music(sfMusic* music) {
     } else {
         sfMusic_play(music);
     }
+}
+
+void *utils_safe_malloc(size_t size, char *reason) {
+    void *mall = malloc(size);
+    if (mall == NULL) {
+        fprintf(stderr, "Failed when doing a malloc, reason : %s\n", reason);
+        exit(EXIT_FAILURE);
+    }
+    return mall;
 }
 
 #endif

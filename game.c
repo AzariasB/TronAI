@@ -9,13 +9,15 @@
 #ifdef GAME_H
 
 game *game_create() {
-    game *g = malloc(sizeof (game));
+    game *g = utils_safe_malloc(sizeof(game), "game creation");
 
     g->players = list_create();
     player *p1 = player_create(1, sfFalse);
     player *p2 = player_create(2, sfTrue);
+    player *p3 = player_create(3, sfTrue);
     list_push(g->players, p1);
     list_push(g->players, p2);
+    list_push(g->players, p3);
     grid *board = grid_create(BOARD_WIDTH, BOARD_HEIGHT);
 
     g->board = board;
@@ -113,7 +115,7 @@ void game_change_state(game* g, char* state_name) {
 }
 
 game *game_copy(const game* g) {
-    game *copy = malloc(sizeof (game));
+    game *copy = utils_safe_malloc(sizeof(game), "Copying game");
     copy->background_texture = sfTexture_copy(g->background_texture);
     copy->background_sprite = sfSprite_copy(g->background_sprite);
     copy->background_glow_texture = sfTexture_copy(g->background_glow_texture);

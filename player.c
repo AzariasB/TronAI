@@ -10,7 +10,7 @@
 #ifdef PLAYER_H
 
 player *player_create(int p_id, sfBool is_AI) {
-    player *p = malloc(sizeof (player));
+    player *p = utils_safe_malloc(sizeof(player), "Creating player");
     p->id = p_id;
     p->m_direction = DIR_UP;
     p->is_AI = is_AI;
@@ -23,7 +23,7 @@ player *player_create(int p_id, sfBool is_AI) {
 
 void *player_copy(void * ptr) {
     player *p = ptr;
-    player *copy = malloc(sizeof (player));
+    player *copy = utils_safe_malloc(sizeof(player), "Copying player");
 
     copy->m_direction = p->m_direction;
     copy->position = p->position;

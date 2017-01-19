@@ -8,13 +8,13 @@
 //Music specific
 
 #include "audio_manager.h"
+#include "utils.h"
 #ifdef AUDIO_MANAGER_H
 
 typedef struct music_pair {
     music_enum key;
     sfMusic *value;
 } music_pair;
-
 
 char *music_filename(music_enum m_enum) {
     if (m_enum == MUSIC_MENU) {
@@ -25,7 +25,7 @@ char *music_filename(music_enum m_enum) {
 }
 
 music_pair *music_create(music_enum m_enum) {
-    music_pair *pair = malloc(sizeof (music_pair));
+    music_pair *pair = utils_safe_malloc(sizeof (music_pair), "Creating music pair");
     pair->key = m_enum;
     pair->value = sfMusic_createFromFile(music_filename(m_enum));
     sfMusic_setLoop(pair->value, sfTrue);
@@ -44,7 +44,7 @@ void music_destroy(void* data) {
 //Audio manager
 
 audio_manager *audio_manager_create() {
-    audio_manager *manager = malloc(sizeof (audio_manager));
+    audio_manager *manager = utils_safe_malloc(sizeof (audio_manager), "Creating audio manager" );
     manager->musics = list_create();
     for (music_enum e = MUSIC_MENU; e <= MUSIC_PLAY; e++) {
         music_pair *p = music_create(e);

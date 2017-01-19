@@ -8,7 +8,7 @@
 #ifdef STATE_PLAY_H
 
 state_play *state_play_create() {
-    state_play *state = malloc(sizeof (state_play));
+    state_play *state = utils_safe_malloc(sizeof(state_play), "Creating state play");
     state->super = game_state_create("play");
     state->super->pause = &state_play_pause;
     state->super->init = &state_play_init;
@@ -34,7 +34,7 @@ state_play *state_play_create() {
 }
 
 state_play* state_play_copy(state_play* s) {
-    state_play *copy = malloc(sizeof (state_play));
+    state_play *copy = utils_safe_malloc(sizeof(state_play), "Copying state play");
     copy->super = game_state_copy(s->super);
     copy->glow_texture = sfTexture_copy(s->glow_texture);
     copy->glow_sprite = sfSprite_copy(s->glow_sprite);

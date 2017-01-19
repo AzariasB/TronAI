@@ -7,7 +7,7 @@
 #ifdef STATE_MENU_H
 
 state_menu *state_menu_create() {
-    state_menu *menu = malloc(sizeof (state_menu));
+    state_menu *menu = utils_safe_malloc(sizeof(state_menu), "Creating menu state");
     menu->super = game_state_create("menu");
 
     menu->super->pause = &state_menu_pause;
@@ -101,7 +101,7 @@ void state_menu_update(game *g) {
 }
 
 state_menu *state_menu_copy(state_menu* s) {
-    state_menu *copy = malloc(sizeof (state_menu));
+    state_menu *copy = utils_safe_malloc(sizeof(state_manager), "copying state menu");
     copy->super = game_state_copy(s->super);
     copy->text_exit = sfText_copy(s->text_exit);
     copy->text_menu = sfText_copy(s->text_menu);

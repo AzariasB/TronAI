@@ -14,10 +14,10 @@
 #ifdef GRID_H
 
 grid* grid_create(int width, int height) {
-    grid* g = malloc(sizeof (grid));
-    g->m_grid = (int**) malloc(height * sizeof (int*));
+    grid* g = utils_safe_malloc(sizeof(grid), "Creating grid");
+    g->m_grid = (int**) utils_safe_malloc(height*sizeof(int*), "Creating grids 2d array");
     for (int i = 0; i < height; i++) {
-        g->m_grid[i] = (int*) malloc(width * sizeof (int));
+        g->m_grid[i] = (int*) utils_safe_malloc(width*sizeof(int), "Creating line of 2d array");
         for (int j = 0; j < width; j++) {
             g->m_grid[i][j] = 0;
         }

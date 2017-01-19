@@ -140,5 +140,8 @@ void utils_hilight_text(sfText *text, sfMouseMoveEvent ev);
  */
 void utils_toggle_music(sfMusic *music);
 
+
+void *utils_safe_malloc(size_t size, char *reason);
+
 #endif /* UTILS_H */
 
