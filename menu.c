@@ -80,7 +80,8 @@ void menu_add_text(menu* m, char* text, void(*action)(game*, sfEvent)) {
 }
 
 void menu_handle_event(menu* m, game *g, sfEvent ev) {
-
+    //Check if changed, and if so, play a little sound
+    int choice_before = m->current_choice;
     if (ev.type == sfEvtKeyPressed && (ev.key.code == sfKeyUp || ev.key.code == sfKeyDown || ev.key.code == sfKeyReturn)) {
         text_action *ta = list_get(m->sub_choices, m->current_choice);
         text_action_deselect(ta);
@@ -112,6 +113,10 @@ void menu_handle_event(menu* m, game *g, sfEvent ev) {
                 (*ta->action)(g, ev);
             }
         }
+    }
+
+    if (choice_before != m->current_choice) {
+        audio_manager_play_sound(g->audio_manager, SOUND_CLICK2);
     }
 }
 
