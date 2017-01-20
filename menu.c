@@ -13,7 +13,7 @@ typedef struct text_action {
 text_action *text_action_create(char *text, void (*action)(game *g, sfEvent ev), int text_height) {
     text_action *ta = utils_safe_malloc(sizeof (text_action), "Creating text action");
     ta->text = utils_create_text(text, 75);
-    sfVector2f position = {0, text_height};
+    sfVector2f position = {50, text_height};
     sfText_setPosition(ta->text, position);
     ta->action = action;
     return ta;
@@ -48,7 +48,19 @@ menu * menu_create(char* title) {
     m->current_choice = 0;
     m->sub_choices = list_create();
     m->title = utils_create_text(title, 100);
+    m->pointer = sfCircleShape_create();
+    sfCircleShape_setPointCount(m->pointer, 3);
+    sfCircleShape_rotate(m->pointer, 90);
+    sfColor select_color = {0, 44, 117, 255};
+
+    sfCircleShape_setFillColor(m->pointer, select_color);
+    sfCircleShape_setOutlineColor(m->pointer, sfRed);
+    sfCircleShape_setOutlineThickness(m->pointer, 1);
+    sfCircleShape_setRadius(m->pointer, 15);
+
+
     sfVector2f position = {0, 0};
+
     sfText_setPosition(m->title, position);
 
     return m;
@@ -59,13 +71,14 @@ menu * menu_copy(const menu* to_copy) {
     copy->current_choice = to_copy->current_choice;
     copy->sub_choices = list_copy(to_copy->sub_choices, &text_action_copy);
     copy->title = sfText_copy(to_copy->title);
-
+    copy->pointer = sfCircleShape_copy(to_copy->pointer);
     return copy;
 }
 
 void menu_destroy(menu* to_destroy) {
     list_destroy(to_destroy->sub_choices, &text_action_destroy);
     sfText_destroy(to_destroy->title);
+    sfCircleShape_destroy(to_destroy->pointer);
     free(to_destroy);
     to_destroy = 0;
 }
@@ -76,6 +89,8 @@ void menu_add_text(menu* m, char* text, void(*action)(game*, sfEvent)) {
     list_push(m->sub_choices, text_a);
     if (m->sub_choices->size == 1) {//Just added the first text
         text_action_select(text_a);
+        sfVector2f select_position = {40, 75 * 2 + (75 / 2)};
+        sfCircleShape_setPosition(m->pointer, select_position);
     }
 }
 
@@ -102,7 +117,6 @@ void menu_handle_event(menu* m, game *g, sfEvent ev) {
                 text_action_deselect(old_ta);
                 m->current_choice = i;
                 text_action_select(ta);
-                return;
             }
 
         }
@@ -117,16 +131,20 @@ void menu_handle_event(menu* m, game *g, sfEvent ev) {
 
     if (choice_before != m->current_choice) {
         audio_manager_play_sound(g->audio_manager, SOUND_CLICK2);
+        sfVector2f select_position = {40, 75 * (m->current_choice + 2) + (75 / 2)};
+        sfCircleShape_setPosition(m->pointer, select_position);
     }
 }
 
 void menu_draw(menu *m, sfRenderWindow *target) {
     sfRenderWindow_drawText(target, m->title, NULL);
 
+
     for (int i = 0; i < m->sub_choices->size; i++) {
         text_action *ta = list_get(m->sub_choices, i);
         sfRenderWindow_drawText(target, ta->text, NULL);
     }
+    sfRenderWindow_drawCircleShape(target, m->pointer, NULL);
 }
 
 #endif

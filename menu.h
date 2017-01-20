@@ -20,6 +20,7 @@ typedef struct game game;
 
 typedef struct menu {
     sfText* title;
+    sfCircleShape *pointer;
     list *sub_choices;
     int current_choice;
 } menu;
