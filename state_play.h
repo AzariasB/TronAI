@@ -28,7 +28,7 @@ typedef struct state_play {
     game_state *super;
     sfTexture *glow_texture;
     sfSprite *glow_sprite;
-    
+
 } state_play;
 
 /**

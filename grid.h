@@ -27,9 +27,9 @@
  * Then as the game goes on, numbers corresponding to user's id are added
  */
 typedef struct grid {
-	int ** m_grid;
-	int width;
-	int height;
+    int ** m_grid;
+    int width;
+    int height;
 } grid;
 
 /**

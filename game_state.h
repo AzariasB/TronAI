@@ -13,6 +13,7 @@ typedef struct game game;
 
 #include <SFML/Window/Event.h>
 #include <string.h>
+
 /**
  * A game state is an interface
  * The game state has a name
@@ -24,7 +25,7 @@ typedef struct game game;
  *  - update called to compute the next step of rendering
  *  - draw draws the current state
  */
-typedef struct game_state{
+typedef struct game_state {
     char *name;
     void (*init)(game *);
     void (*pause)(game *);
@@ -55,7 +56,7 @@ game_state *game_state_copy(const game_state *to_copy);
  * 
  * @param s the game_state to destroy
  */
-void game_state_destroy(game_state *s );
+void game_state_destroy(game_state *s);
 
 #endif /* GAME_STATE_H */
 

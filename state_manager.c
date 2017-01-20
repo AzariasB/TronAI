@@ -7,7 +7,7 @@
 #ifdef STATE_MANAGER_H
 
 state_manager *state_manager_create() {
-    state_manager *m = utils_safe_malloc(sizeof(state_manager), "Creating state manager");
+    state_manager *m = utils_safe_malloc(sizeof (state_manager), "Creating state manager");
     m->st_menu = state_menu_create();
     m->st_pause = state_pause_create();
     m->st_play = state_play_create();
@@ -25,7 +25,7 @@ void state_manager_destroy(state_manager *m) {
 }
 
 state_manager *state_manager_copy(state_manager *m) {
-    state_manager *copy = utils_safe_malloc(sizeof(state_manager), "Copying state manager");
+    state_manager *copy = utils_safe_malloc(sizeof (state_manager), "Copying state manager");
     copy->st_menu = state_menu_copy(m->st_menu);
     copy->st_play = state_play_copy(m->st_play);
     copy->st_pause = state_pause_copy(m->st_pause);

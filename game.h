@@ -25,7 +25,6 @@
 #include "state_manager.h"
 #include "list.h"
 #include "audio_manager.h"
-
 /**
  * The game is the main structure of this project
  * It contains 2 players (an array later maybe ... ?)
@@ -36,7 +35,8 @@
  * A boolean to tell wether the game ended
  * A sprite and a texture for the background image
  */
-typedef struct game {
+typedef struct game
+{
     list *players;
     grid *board;
 

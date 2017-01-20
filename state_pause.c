@@ -59,6 +59,7 @@ void state_pause_handle_event(game *g, sfEvent event) {
         game_change_state(g, "play");
     }
 }
+
 void state_pause_update(game *g) {
 
 }

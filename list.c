@@ -110,15 +110,15 @@ void list_remove_node(list* target, int index, void (*destroy)(void *)) {
 }
 
 void list_clear(list* target, void (*destroy)(void*)) {
-//    list_node *current = target->head_sentinel->next;
-    while(target->size > 0){
+    //    list_node *current = target->head_sentinel->next;
+    while (target->size > 0) {
         list_pop(target, destroy);
     }
-//    while (current != target->tail_sentinel) {
-//        list_node *next = current->next;
-//        list_node_destroy(current, destroy);
-//        current = next;
-//    }
+    //    while (current != target->tail_sentinel) {
+    //        list_node *next = current->next;
+    //        list_node_destroy(current, destroy);
+    //        current = next;
+    //    }
     target->head_sentinel->next = target->tail_sentinel;
     target->size = 0;
 }

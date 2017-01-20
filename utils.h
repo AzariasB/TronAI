@@ -14,15 +14,15 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#define BOARD_WIDTH 30
-#define BOARD_HEIGHT 20
+//#define BOARD_WIDTH 30
+//#define BOARD_HEIGHT 20
 
 // The number of pixel for a single cell
-#define CELL_SIDE 32
+//#define CELL_SIDE 32
 
 
-#define SCREEN_WIDTH CELL_SIDE * BOARD_WIDTH
-#define SCREEN_HEIGHT CELL_SIDE * BOARD_HEIGHT
+//#define SCREEN_WIDTH CELL_SIDE * BOARD_WIDTH
+//#define SCREEN_HEIGHT CELL_SIDE * BOARD_HEIGHT
 
 #define MIN(a,b)(a > b ? b : a)
 #define MAX(a,b)(a > b ? a : b)
@@ -42,6 +42,8 @@
  * @return wether the two strings are the same
  */
 #define SAME(a,b)(strcmp(a,b) == 0)
+
+extern sfFont *game_font;
 
 /**
  * Generates a vector :
@@ -145,6 +147,8 @@ void utils_toggle_music(sfMusic *music);
 
 
 void *utils_safe_malloc(size_t size, char *reason);
+
+void utils_safe_free(void *to_free);
 
 #endif /* UTILS_H */
 

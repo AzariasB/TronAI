@@ -18,13 +18,15 @@
 #include <stdlib.h>
 #include "utils.h"
 #include "direction.h"
+#include "config.h"
 
 /**
  * A player can be an IA or a human player
  * The player can be dead, it has a position
  * ,a direction and an ID
  */
-typedef struct player {
+typedef struct player
+{
     sfVector2i position;
     sfBool is_dead;
     sfBool is_AI;
@@ -54,7 +56,7 @@ void *player_copy(void *ptr);
  * @param p the player
  * @return the created rectangle
  */
-sfRectangleShape *player_to_rect(const player *p);
+sfRectangleShape *player_to_rect(const player *p, config *g);
 
 /**
  * Destroys the given player
