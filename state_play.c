@@ -141,6 +141,9 @@ void state_play_player_died(game* g, player* p)
 		//Show the winner
 		player *winner = list_first(g->players, &player_is_alive);
 		printf("The winner is : %d\n", winner->id);
+		audio_manager_play_sound(g->audio_manager, SOUND_POSITIVE);
+	} else {
+		audio_manager_play_sound(g->audio_manager, SOUND_NEGATIVE1);
 	}
 
 }

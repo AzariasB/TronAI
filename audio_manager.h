@@ -11,23 +11,29 @@
 
 #include "list.h"
 
-typedef enum music_enum {
+typedef enum music_enum
+{
     MUSIC_MENU,
     MUSIC_PLAY,
     MUSIC_ALL
 } music_enum;
 
-typedef enum sound_enum {
+typedef enum sound_enum
+{
     SOUND_CLICK1,
     SOUND_CLICK2,
-    SOUND_ALL
+    SOUND_NEGATIVE1,
+    SOUND_NEGATIVE2,
+    SOUND_POSITIVE,
+    SOUND_ALL,
 } sound_enum;
 
 typedef struct sound_pair sound_pair;
 typedef struct music_pair music_pair;
 //Audio manager
 
-typedef struct audio_manager {
+typedef struct audio_manager
+{
     list *musics;
     list *sounds;
     music_pair *current_music;
