@@ -32,6 +32,10 @@ state_play *state_play_create()
 	sfVector2f g_scale = {cell_side / s_bouds.width, cell_side / s_bouds.height};
 	sfSprite_setScale(state->glow_sprite, g_scale);
 
+	state->end_text = utils_create_text("Game ended", 50);
+	sfVector2f text_position = {10, 10}; //To center on the screen
+	sfText_setPosition(state->end_text, text_position);
+
 	return state;
 }
 
@@ -41,6 +45,7 @@ state_play* state_play_copy(state_play* s)
 	copy->super = game_state_copy(s->super);
 	copy->glow_texture = sfTexture_copy(s->glow_texture);
 	copy->glow_sprite = sfSprite_copy(s->glow_sprite);
+	copy->end_text = sfText_copy(s->end_text);
 	return copy;
 }
 
@@ -49,6 +54,7 @@ void state_play_destroy(state_play* s)
 	game_state_destroy(s->super);
 	sfSprite_destroy(s->glow_sprite);
 	sfTexture_destroy(s->glow_texture);
+	sfText_destroy(s->end_text);
 	free(s);
 }
 
@@ -75,6 +81,11 @@ void state_play_draw(game* g)
 				}
 			}
 		}
+	}
+
+	if (g->ended) {
+		state_play *st_play = g->st_manager->st_play;
+		sfRenderWindow_drawText(g->window, st_play->end_text, NULL);
 	}
 }
 
@@ -118,7 +129,12 @@ void state_play_update(game* g)
 void state_play_handle_event(game* g, sfEvent event)
 {
 	if (event.type == sfEvtKeyPressed) {
-		if (event.key.code == sfKeySpace) {
+		if (g->ended) {
+			if(event.key.code == sfKeyEscape){
+				game_reset(g);
+				game_change_state(g, "menu");
+			}
+		} else if (event.key.code == sfKeySpace) {
 			game_change_state(g, "pause");
 		} else if (utils_is_valid_key(event.key.code)) {
 			g->paused = sfFalse;
@@ -130,8 +146,6 @@ void state_play_handle_event(game* g, sfEvent event)
 
 void state_play_player_died(game* g, player* p)
 {
-	printf("Someone's dead : player number %d\n", p->id);
-	//Play sound
 	grid_clear_value(g->board, p->id);
 	p->is_dead = sfTrue;
 	int alive_players = list_count(g->players, &player_is_alive);
@@ -140,8 +154,10 @@ void state_play_player_died(game* g, player* p)
 		g->paused = sfTrue;
 		//Show the winner
 		player *winner = list_first(g->players, &player_is_alive);
-		printf("The winner is : %d\n", winner->id);
-		audio_manager_play_sound(g->audio_manager, SOUND_POSITIVE);
+		char *text = winner->is_AI ? "IA Won !" : "You won !";
+		state_play *st_play = g->st_manager->st_play;
+		sfText_setString(st_play->end_text, text);
+		audio_manager_play_sound(g->audio_manager, winner->is_AI ? SOUND_NEGATIVE2 : SOUND_POSITIVE);
 	} else {
 		audio_manager_play_sound(g->audio_manager, SOUND_NEGATIVE1);
 	}
