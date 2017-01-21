@@ -129,6 +129,16 @@ game *game_copy(const game *g);
 void game_change_state(game *g, char *state_name);
 
 /**
+ * Resets the game
+ * Removes all the value from the board
+ * sets new positions for the players
+ * 
+ * @param g the game to reset
+ */
+void game_reset(game *g);
+
+
+/**
  * Init the players position in the game
  * Checks for no collision between the player
  * when creating the game
@@ -136,6 +146,16 @@ void game_change_state(game *g, char *state_name);
  * @param g the game 
  */
 void game_init_player_pos(game *g);
+
+/**
+ * Resets all the player posision
+ * on the board (set the x and y to -1)
+ * set all of the player to alive,
+ * ste the direction to down
+ * 
+ * @param g the game with the players to reset
+ */
+void game_reset_players(game *g);
 
 /**
  * Destroys the game

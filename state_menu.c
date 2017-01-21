@@ -13,6 +13,7 @@ void state_menu_clicked_exit(game *g, sfEvent ev)
 
 void state_menu_clicked_play(game *g, sfEvent ev)
 {
+	game_reset(g);
 	game_change_state(g, "play");
 }
 

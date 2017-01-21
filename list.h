@@ -159,4 +159,25 @@ list *list_map(const list *to_map, void *(*copier)(void *), void (*mapper)(void 
  */
 void list_each(const list *to_each, void (*func)(void *));
 
+/**
+ * Counts the number of elements
+ * with a true predicate
+ * 
+ * @param to_count the list to parse
+ * @param predicate the predicate
+ * @return the number of elements that returned true at the given predicate
+ */
+int list_count(const list *to_count, sfBool (*predicate)(void *));
+
+/**
+ * Returns the first element
+ * that returs true at the givnen
+ * predicate
+ * returns NULL if none found
+ * 
+ * @param l the list to parse
+ * @param predicate the predicate to test on each element
+ * @return the first elements that returned true at the given predicate
+ */
+void *list_first(const list *l, sfBool (*predicate)(void *));
 #endif

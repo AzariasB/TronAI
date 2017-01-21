@@ -126,6 +126,17 @@ void game_init_player_pos(game* g)
 	}
 }
 
+void game_reset_players(game* g)
+{
+	for (int i = 0; i < g->players->size; i++) {
+		player *p = list_get(g->players, i);
+		sfVector2i position = {-1, -1};
+		p->position = position;
+		p->is_dead = sfFalse;
+		p->m_direction = DIR_DOWN;
+	}
+}
+
 void game_add_player_pos(game* g, player* p)
 {
 	grid_set(g->board, p->position, p->id);
@@ -134,6 +145,14 @@ void game_add_player_pos(game* g, player* p)
 void game_change_state(game* g, char* state_name)
 {
 	state_manager_change_state(g->st_manager, g, state_name);
+}
+
+void game_reset(game* g)
+{
+	grid_reset(g->board);
+	game_reset_players(g);
+	game_init_player_pos(g);
+	g->ended = sfFalse;
 }
 
 game *game_copy(const game* g)

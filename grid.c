@@ -72,4 +72,25 @@ void grid_set(grid* g, sfVector2i pos, int value)
 	g->m_grid[pos.y][pos.x] = value;
 }
 
+void grid_reset(grid* g)
+{
+	for (int y = 0; y < g->height; y++) {
+		for (int x = 0; x < g->width; x++) {
+			g->m_grid[y][x] = -1;
+		}
+	}
+}
+
+void grid_clear_value(grid* g, int val)
+{
+	for (int y = 0; y < g->height; y++) {
+		for (int x = 0; x < g->width; x++) {
+			int v = g->m_grid[y][x];
+			if (v == val) {
+				g->m_grid[y][x] = -1;
+			}
+		}
+	}
+}
+
 #endif

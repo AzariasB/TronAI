@@ -68,7 +68,7 @@ void state_play_draw(game* g)
 				player *m_player = list_get(g->players, p_index);
 				if (m_v == m_player->id) {
 					sfRectangleShape *shape = utils_rec_from_xy_color(x, y, m_player->id);
-					sfVector2f size =sfRectangleShape_getSize(shape);
+					sfVector2f size = sfRectangleShape_getSize(shape);
 					sfRenderWindow_drawRectangleShape(g->window, shape, NULL);
 					sfRectangleShape_destroy(shape);
 					break;
@@ -95,20 +95,20 @@ void state_play_update(game* g)
 		list *l = g->players;
 		for (int i = 0; i < l->size; i++) {
 			player *p = list_get(l, i);
-			if (p->is_AI) {
-				grid *g_cpy = grid_copy(g->board);
-				list *p_copy = list_copy(l, &player_copy);
-				p->m_direction = ia_play(g_cpy, p_copy, p->id);
-				grid_destroy(g_cpy);
-				list_destroy(p_copy, &player_destroy);
-			}
-			player_update(p);
-			if (game_player_is_dead(g, p)) {
-				g->ended = sfTrue;
-				g->paused = sfTrue;
-				printf("Someone's dead : player number %d\n", p->id);
-			} else {
-				game_add_player_pos(g, p);
+			if (!p->is_dead) {
+				if (p->is_AI) {
+					grid *g_cpy = grid_copy(g->board);
+					list *p_copy = list_copy(l, &player_copy);
+					p->m_direction = ia_play(g_cpy, p_copy, p->id);
+					grid_destroy(g_cpy);
+					list_destroy(p_copy, &player_destroy);
+				}
+				player_update(p);
+				if (game_player_is_dead(g, p)) {
+					state_play_player_died(g, p);
+				} else {
+					game_add_player_pos(g, p);
+				}
 			}
 		}
 	}
@@ -128,5 +128,21 @@ void state_play_handle_event(game* g, sfEvent event)
 	}
 }
 
+void state_play_player_died(game* g, player* p)
+{
+	printf("Someone's dead : player number %d\n", p->id);
+	//Play sound
+	grid_clear_value(g->board, p->id);
+	p->is_dead = sfTrue;
+	int alive_players = list_count(g->players, &player_is_alive);
+	if (alive_players <= 1) {
+		g->ended = sfTrue;
+		g->paused = sfTrue;
+		//Show the winner
+		player *winner = list_first(g->players, &player_is_alive);
+		printf("The winner is : %d\n", winner->id);
+	}
+
+}
 
 #endif

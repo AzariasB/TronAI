@@ -74,5 +74,13 @@ void player_destroy(void *ptr);
  */
 void player_update(player *p);
 
+/**
+ * Returns wether the player is alive
+ * 
+ * @param p the player to check
+ * @return wether the player is alive
+ */
+sfBool player_is_alive(void *p);
+
 #endif /* PLAYER_H */
 

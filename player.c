@@ -67,6 +67,12 @@ void player_destroy(void* ptr)
 	free(p);
 }
 
+sfBool player_is_alive(void* p)
+{
+	player *pl = p;
+	return !pl->is_dead;
+}
+
 void player_update(player* p)
 {
 	p->position = utils_update_pos(p->position, p->m_direction);

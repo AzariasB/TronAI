@@ -15,6 +15,7 @@
 #include <SFML/Audio/Types.h>
 #include "game_state.h"
 #include "utils.h"
+#include "player.h"
 
 typedef struct game game;
 
@@ -24,7 +25,8 @@ typedef struct game game;
  * where you can actually play the game.
  * It has a music, and (as a test) a glow texture/sprite
  */
-typedef struct state_play {
+typedef struct state_play
+{
     game_state *super;
     sfTexture *glow_texture;
     sfSprite *glow_sprite;
@@ -59,6 +61,17 @@ void state_play_handle_event(game *g, sfEvent event);
 void state_play_update(game *g);
 
 void state_play_draw(game *g);
+
+/**
+ * Called whenever a player dies
+ * If more than two players are still alive
+ * the game continues
+ * else, the game is finished
+ * 
+ * @param g the game 
+ * @param p the player who died
+ */
+void state_play_player_died(game *g, player *p);
 
 #endif /* STATE_PLAY_H */
 

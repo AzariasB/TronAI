@@ -89,5 +89,22 @@ void grid_set(grid *g, sfVector2i pos, int value);
  */
 void grid_destroy(grid* g);
 
+/**
+ * Sets all the cells of the grid
+ *  to '-1' (neutral value)
+ * 
+ * @param g the grid to reset
+ */
+void grid_reset(grid *g);
+
+/**
+ * Removes all the given value from
+ * the grid, replace them with -1
+ * 
+ * @param g the grid to clear
+ * @param val the value to remove
+ */
+void grid_clear_value(grid *g, int val);
+
 #endif /* GRID_H */
 
