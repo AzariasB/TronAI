@@ -14,11 +14,13 @@ game *game_create()
 	game *g = utils_safe_malloc(sizeof(game), "game creation");
 
 	int player_number = config_get_int(main_configuration, "PLAYERS", 2);
+	player_number = MAX(2, player_number);
+	int ai_only = config_get_int(main_configuration, "AI_ONLY", 0);
 	g->players = list_create();
 
 	for (int i = 0; i < player_number; i++) {
 		player *p = NULL;
-		if (i == 0) {
+		if (i == 0 && !ai_only) {
 			p = player_create(i, sfFalse);
 		} else {
 			p = player_create(i, sfTrue);

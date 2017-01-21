@@ -184,6 +184,7 @@ void state_play_update(game* g)
 
 void state_play_handle_event(game* g, sfEvent event)
 {
+	int ai_only = config_get_int(main_configuration, "AI_ONLY", 0);
 	if (event.type == sfEvtKeyPressed) {
 		if (g->ended) {
 			if (event.key.code == sfKeyEscape) {
@@ -194,6 +195,9 @@ void state_play_handle_event(game* g, sfEvent event)
 			game_change_state(g, "pause");
 		} else if (utils_is_valid_key(event.key.code)) {
 			g->paused = sfFalse;
+			if (ai_only) {
+				return;
+			}
 			player *human = list_get(g->players, 0); //The first player is the human player
 			human->m_direction = direction_from_key_code(event.key.code);
 		}
