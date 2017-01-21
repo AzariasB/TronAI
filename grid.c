@@ -93,4 +93,20 @@ void grid_clear_value(grid* g, int val)
 	}
 }
 
+sfBool grid_is_empty(grid* g, sfVector2i pos)
+{
+	if (!grid_contains(g, pos)) {
+		return sfTrue;
+	}
+	return g->m_grid[pos.y][pos.x] == -1;
+}
+
+sfBool grid_equals(const grid* g, sfVector2i pos, int val)
+{
+	if (!grid_contains(g, pos)) {
+		return sfFalse;
+	}
+	return g->m_grid[pos.y][pos.x] == val;
+}
+
 #endif

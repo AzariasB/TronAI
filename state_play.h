@@ -74,5 +74,6 @@ void state_play_draw(game *g);
  */
 void state_play_player_died(game *g, player *p);
 
+
 #endif /* STATE_PLAY_H */
 

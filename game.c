@@ -41,7 +41,7 @@ game *game_create()
 	g->audio_manager = audio_manager_create();
 	(*g->st_manager->current_state->resume)(g);
 
-	g->background_texture = sfTexture_createFromFile("background.png", NULL);
+	g->background_texture = sfTexture_createFromFile("textures/background.png", NULL);
 	g->background_sprite = sfSprite_create();
 
 	sfSprite_setTexture(g->background_sprite, g->background_texture, sfFalse);
@@ -50,7 +50,7 @@ game *game_create()
 	sfVector2f background_scale = {screen_width / background_bounds.width, screen_height / background_bounds.height};
 	sfSprite_setScale(g->background_sprite, background_scale);
 
-	g->background_glow_texture = sfTexture_createFromFile("glow.png", NULL);
+	g->background_glow_texture = sfTexture_createFromFile("textures/glow.png", NULL);
 	g->background_glow_sprite = sfSprite_create();
 
 	sfSprite_setTexture(g->background_glow_sprite, g->background_glow_texture, sfFalse);

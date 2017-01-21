@@ -26,7 +26,8 @@
  * the grid is initialized with a 0
  * Then as the game goes on, numbers corresponding to user's id are added
  */
-typedef struct grid {
+typedef struct grid
+{
     int ** m_grid;
     int width;
     int height;
@@ -105,6 +106,30 @@ void grid_reset(grid *g);
  * @param val the value to remove
  */
 void grid_clear_value(grid *g, int val);
+
+/**
+ * Returns wether the grid is empty 
+ * (value = -1) at the given position
+ * if the position is out of the grid, returns true
+ * 
+ * @param g the grid
+ * @param pos the position where to check
+ * @return wether the grid is empty at the given position
+ */
+sfBool grid_is_empty(grid *g, sfVector2i pos);
+
+/**
+ * Returns true if there is the
+ * given value at the given position
+ * if the position is out of border
+ * returns false
+ * 
+ * @param g the grid
+ * @param pos the position that may contain the value
+ * @param val the value that might be at the given position
+ * @return wether the grid contains the given value at the given position
+ */
+sfBool grid_equals(const grid *g, sfVector2i pos, int val);
 
 #endif /* GRID_H */
 

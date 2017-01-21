@@ -7,6 +7,59 @@
 
 #ifdef STATE_PLAY_H
 
+sfIntRect rectangle(sfBool up, sfBool right, sfBool down, sfBool left)
+{
+	sfIntRect rect;
+	rect.height = 64;
+	rect.width = 64;
+	rect.top = 0;
+	rect.left = 0;
+	if (up && !down && !right && !left) {
+		rect.left = 1 * 64;
+	} else if (up && right) {
+		rect.left = 9 * 64;
+	} else if (up && left) {
+		rect.left = 4 * 64;
+	} else if (up && down) {
+		rect.left = 6 * 64;
+	} else if (left && right) {
+		rect.left = 5 * 64;
+	} else if (down && left) {
+		rect.left = 3 * 64;
+	} else if (down && right) {
+		rect.left = 8 * 64;
+	} else if (down && !right && !left && !up) {
+		rect.left = 10 * 64;
+	} else if (left && !down && !up && !right) {
+		rect.left = 7 * 64;
+	} else if (right && !down && !up && !left) {
+		rect.left = 2 * 64;
+	}
+	return rect;
+}
+
+void render_player(game *g, sfVector2i pos, int p_id)
+{
+	sfVector2i up = {pos.x, pos.y - 1};
+	sfVector2i right = {pos.x + 1, pos.y};
+	sfVector2i down = {pos.x, pos.y + 1};
+	sfVector2i left = {pos.x - 1, pos.y};
+	sfBool up_fill = grid_equals(g->board, up, p_id);
+	sfBool right_fill = grid_equals(g->board, right, p_id);
+	sfBool down_fill = grid_equals(g->board, down, p_id);
+	sfBool left_fill = grid_equals(g->board, left, p_id);
+
+	sfIntRect texture_pos = rectangle(up_fill, right_fill, down_fill, left_fill);
+	state_play *st_play = g->st_manager->st_play;
+	//	printf("Texture/Width=%d/Height=%d/Top=%d/Left=%d\n", texture_pos.width, texture_pos.height, texture_pos.top, texture_pos.left);
+	sfSprite_setTextureRect(st_play->glow_sprite, texture_pos);
+	int cell_side = config_get_int(main_configuration, "CELL_SIDE", 16);
+	sfVector2f sprite_pos = {pos.x * cell_side, pos.y * cell_side};
+	sfSprite_setPosition(st_play->glow_sprite, sprite_pos);
+	sfSprite_setColor(st_play->glow_sprite, utils_int_to_color(p_id));
+	sfRenderWindow_drawSprite(g->window, st_play->glow_sprite, NULL);
+}
+
 state_play *state_play_create()
 {
 	state_play *state = utils_safe_malloc(sizeof(state_play), "Creating state play");
@@ -18,12 +71,21 @@ state_play *state_play_create()
 	state->super->resume = &state_play_resume;
 	state->super->update = &state_play_update;
 
-	state->glow_texture = sfTexture_createFromFile("glow.png", NULL);
+	state->glow_texture = sfTexture_createFromFile("textures/spritesheet.png", NULL);
 	state->glow_sprite = sfSprite_create();
+	sfIntRect rect;
+	rect.height = rect.width = 64;
+	rect.top = rect.left = 0;
+	sfSprite_setTextureRect(state->glow_sprite, rect);
+
+	sfFloatRect bound = sfSprite_getGlobalBounds(state->glow_sprite);
+	sfVector2f scale = {64 / bound.width, 64 / bound.height};
+	sfSprite_setScale(state->glow_sprite, scale);
 
 	sfSprite_setTexture(state->glow_sprite, state->glow_texture, sfFalse);
 
 	sfVector2f glow_position = {0, 0};
+
 	sfSprite_setPosition(state->glow_sprite, glow_position);
 
 
@@ -69,16 +131,10 @@ void state_play_draw(game* g)
 	//    state_play *st_play = g->st_manager->st_play;
 	for (int y = 0; y < g->board->height; y++) {
 		for (int x = 0; x < g->board->width; x++) {
-			int m_v = g->board->m_grid[y][x];
-			for (int p_index = 0; p_index < g->players->size; p_index++) {
-				player *m_player = list_get(g->players, p_index);
-				if (m_v == m_player->id) {
-					sfRectangleShape *shape = utils_rec_from_xy_color(x, y, m_player->id);
-					sfVector2f size = sfRectangleShape_getSize(shape);
-					sfRenderWindow_drawRectangleShape(g->window, shape, NULL);
-					sfRectangleShape_destroy(shape);
-					break;
-				}
+			sfVector2i pos = {x, y};
+			if (!grid_is_empty(g->board, pos)) {
+				int val = grid_at(g->board, pos);
+				render_player(g, pos, val);
 			}
 		}
 	}
@@ -130,7 +186,7 @@ void state_play_handle_event(game* g, sfEvent event)
 {
 	if (event.type == sfEvtKeyPressed) {
 		if (g->ended) {
-			if(event.key.code == sfKeyEscape){
+			if (event.key.code == sfKeyEscape) {
 				game_reset(g);
 				game_change_state(g, "menu");
 			}
