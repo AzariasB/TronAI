@@ -127,8 +127,6 @@ void state_play_init(game* g)
 
 void state_play_draw(game* g)
 {
-	//                sfVector2f glow_position = {CELL_SIDE * g->player1->position.x, CELL_SIDE * g->player1->position.y};
-	//    state_play *st_play = g->st_manager->st_play;
 	for (int y = 0; y < g->board->height; y++) {
 		for (int x = 0; x < g->board->width; x++) {
 			sfVector2i pos = {x, y};
@@ -178,8 +176,8 @@ void state_play_update(game* g)
 				}
 			}
 		}
+		grid_print(g->board);
 	}
-
 }
 
 void state_play_handle_event(game* g, sfEvent event)

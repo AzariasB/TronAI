@@ -58,7 +58,7 @@ int grid_at(const grid* g, sfVector2i pos)
 {
 	if (!grid_contains(g, pos)) {
 		fprintf(stderr, "Tried to access x=%d - y=%d of the grid (not available)\n", pos.x, pos.y);
-		return 0;
+		return -1;
 	}
 	return g->m_grid[pos.y][pos.x];
 }
@@ -107,6 +107,21 @@ sfBool grid_equals(const grid* g, sfVector2i pos, int val)
 		return sfFalse;
 	}
 	return g->m_grid[pos.y][pos.x] == val;
+}
+
+void grid_print(const grid* g)
+{
+	printf("--------------------BEGIN GRID-----------------\n");
+	for (int i = 0; i < g->height; i++) {
+		for (int j = 0; j < g->width; j++) {
+			sfVector2i pos = {j, i};
+			int v = grid_at(g,pos);
+			printf("%c ", v == -1 ? '-' : (v+'0') );
+		}
+		printf("\n");
+	}
+	printf("--------------------End   GRID-----------------\n");
+
 }
 
 #endif

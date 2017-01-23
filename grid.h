@@ -131,5 +131,12 @@ sfBool grid_is_empty(grid *g, sfVector2i pos);
  */
 sfBool grid_equals(const grid *g, sfVector2i pos, int val);
 
+/**
+ * Prints the grid
+ * 
+ * @param g
+ */
+void grid_print(const grid *g);
+
 #endif /* GRID_H */
 
