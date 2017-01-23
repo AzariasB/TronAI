@@ -28,8 +28,6 @@ typedef struct game game;
 typedef struct state_play
 {
     game_state *super;
-    sfTexture *glow_texture;
-    sfSprite *glow_sprite;
     sfText *end_text;
 
 } state_play;
