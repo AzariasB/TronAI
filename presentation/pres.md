@@ -1,8 +1,6 @@
-:title: Hovercraft! demo
+:title: Tron
 :data-transition-duration: 1500
 :css: pres.css
-
-
 
 ----
 
@@ -22,9 +20,7 @@ Sommaire
 
 5. L'algorithme de Voronoi
 
-6. Calcul de score en fonction du Voronoi
-
-7. Application
+6. Application
 
 .. note::
 
@@ -35,11 +31,8 @@ Sommaire
 Présentation de TRON
 ========================
 
-.. raw:: html
-
-    <video width="100%" controls src="tron.mp4" >
-    Your browser does not support the video tag.
-    </video>
+.. image:: lightcycle.png
+    :width: 800px
 
 .. note::
 
@@ -50,11 +43,13 @@ Présentation de TRON
 Simplification
 =====================
 
-AJOUTER DES SCREENSHOTS
+.. image:: simplification.png
 
 .. note::
 
-    Explication de la grille en 2D
+    Grille en 2d, avec une position et
+    une trace à chaque passage
+    But du jeu : ne pas se prendre la trace des autres
 
 ----
 
@@ -64,7 +59,6 @@ Les IA en bot programming
 PIERRE
 
 .. note::
-
  Tes notes ici
 
 ----
@@ -82,43 +76,40 @@ PIERRE
 ----
 
 
-Voronoi
-============
+Diagramme de Voronoi
+=====================
 
-Ajouter des images ici (Azarias)
+- Définition
+- Application
+
+.. image:: voronoi_explanation.png
+
 
 .. note::
 
-   Voronoi
+    Le diagramme de Voronoi est un découpage du plan (pavage) en cellules à partir d'un ensemble discret de points appelés « germes ». Chaque cellule enferme un seul germe, et forme l'ensemble des points du plan plus proches de ce germe que de tous les autres. (wikipédia)
+
+    Ce diagramme est utilisé dans l'intelligence artificielle pour calculer le score de manière très simple : plus l'IA a de cellules dans son 'camp', plus elle gagne des points, son but va donc d'augmenter son nombre de points, et pour cela, réduire le nombre de point des autres joueurs
 
 ----
 
-Calcul de score en fonction du voronoi
-======================================
-
-
-(Azarias)
-
-.. note::
-
-    Mes notes
-
-----
 
 
 Application
 ==================
 
-Csfml,
-hovercraft
-open-source
-Demo (si on a le temps)
+- csfml
+- open-source
+- demo
 
 .. note::
 
-    Démo
+    Pour réaliser l'affichange du jeu, nous avons utilisé la bibliothèque open-source 'csfml', qui est la version 'C' de sfml.
+    Le code source du jeu est totalement open-source. Le but de ce projet est d'inciter n'importe qui à programmer une IA et a la tester
+    Let's play !
 
 ----
+
 
 Merci pour votre attention
 ==========================
