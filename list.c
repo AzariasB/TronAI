@@ -62,7 +62,8 @@ void list_destroy(list *l, void (*destroy)(void *))
 	list_node_destroy(l->head_sentinel, destroy);
 	l->tail_sentinel->next = NULL;
 	list_node_destroy(l->tail_sentinel, destroy);
-	//    free(l);
+	free(l);
+	l = 0;
 }
 
 list_node *list_get_node(const list* a, int index)
@@ -104,9 +105,19 @@ list_node *list_push(list* target, void* data)
 	return list_add(target, target->size, data);
 }
 
-void list_pop(list* target, void(*destroyer)(void*))
+void *list_pop(list* target)
 {
-	list_remove_node(target, target->size - 1, destroyer);
+	if (target->size > 0) {
+		list_node *prev = list_get_node(target, target->size - 2);
+		list_node *to_rm = list_get_node(target, target->size - 1);
+		prev->next = to_rm->next;
+		void *data = to_rm->data;
+		target->size--;
+		free(to_rm);
+		to_rm = 0;
+		return data;
+	}
+	return NULL;
 }
 
 void list_remove_node(list* target, int index, void (*destroy)(void *))
@@ -125,13 +136,9 @@ void list_clear(list* target, void (*destroy)(void*))
 {
 	//    list_node *current = target->head_sentinel->next;
 	while (target->size > 0) {
-		list_pop(target, destroy);
+		void *data = list_pop(target);
+		(*destroy)(data);
 	}
-	//    while (current != target->tail_sentinel) {
-	//        list_node *next = current->next;
-	//        list_node_destroy(current, destroy);
-	//        current = next;
-	//    }
 	target->head_sentinel->next = target->tail_sentinel;
 	target->size = 0;
 }

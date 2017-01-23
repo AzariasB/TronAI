@@ -90,11 +90,12 @@ list_node *list_push(list *target, void *data);
 
 /**
  * Remove the last element of the list
+ * and returns the last element
+ * returns NULL if the list is empty
  * 
  * @param target the list to use
- * @param destroyer the function to destroy the last element
  */
-void list_pop(list * target, void (*destroyer)(void*));
+void *list_pop(list * targe);
 
 /**
  *Delete the node at the given index
