@@ -13,6 +13,7 @@
 #include "direction.h"
 #include "grid.h"
 #include "list.h"
+#include "minmax.h"
 
 /**
  * Called to make an ia play
@@ -30,7 +31,10 @@
  */
 direction ia_play(grid *grid, list *players, int my_id) {
     //TODO : IMPLEMENT
-    return DIR_DOWN;
+    printf("ok ?\n");
+    
+    grid_normalized( grid);
+    return ai_get_best_direction(players, grid, 0, my_id);;
 }
 
 
