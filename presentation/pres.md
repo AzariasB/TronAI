@@ -56,10 +56,19 @@ Simplification
 Les IA en bot programming
 =========================
 
-PIERRE
+
+
+- Systemes experts
+- Algorithmes evolutionnaires
+- Theorie des jeux
 
 .. note::
- Tes notes ici
+	systemes experts : patterns : majorité des jeux :
+	lisp , base de connaissance pas adaptable, previsible
+	autres algos : beaucoup de temps de calcul
+	evolutionnaires, optimisation, monte carlo souvent. beaucoup de calculs et peu de prevision des coups de l'adversaire
+	Theorie des jeux, board games : ameliorations,
+	algo de base de la theorie des jeux : minmax
 
 ----
 
@@ -69,7 +78,14 @@ MinMax
 
 PIERRE
 
+.. image:: minmax.png
+
 .. note::
+	1928 theoreme de minmax
+	permet de trouver coup parfait :
+	explain !
+	complexité
+	importance du score -> AZ
 
     Tes notes ici
 
